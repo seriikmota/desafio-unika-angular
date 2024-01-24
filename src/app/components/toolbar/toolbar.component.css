@@ -1,0 +1,21 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  height: 55px;
+}
+
+mat-toolbar i {
+  font-size: 25px;
+  margin-right: 25px;
+}
+
+mat-toolbar button {
+  font-size: 17px;
+}
+
+mat-toolbar .active {
+  color: #BFCFE7;
+}
+
