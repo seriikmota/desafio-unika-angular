@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {Monitorador, MonitoradorList} from "../models/monitorador";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class MonitoradorService {
   constructor(private http: HttpClient) {
 
   }
-  getCidade() {
-    return this.http.get(this.baseUrl);
+  getMonitoradores() {
+    return this.http.get<Monitorador[]>(this.baseUrl);
   }
 }

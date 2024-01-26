@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MonitoradorRoutingModule } from './monitorador-routing.module';
 import {CadastroComponent} from "./cadastro/cadastro.component";
 import {ListagemComponent} from "./listagem/listagem.component";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import {ListagemComponent} from "./listagem/listagem.component";
     CommonModule,
     MonitoradorRoutingModule,
     CadastroComponent,
-    ListagemComponent
+    ListagemComponent,
+    HttpClientModule
   ]
 })
 export class MonitoradorModule { }

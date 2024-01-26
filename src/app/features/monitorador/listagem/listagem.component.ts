@@ -7,17 +7,16 @@ import {MatIcon} from "@angular/material/icon";
 import {NgbCollapseModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelectModule} from "@angular/material/select";
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription, MatExpansionPanelHeader,
-  MatExpansionPanelTitle
-} from "@angular/material/expansion";
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
 import {MatPaginator, MatPaginatorIntl, MatPaginatorModule} from "@angular/material/paginator";
 import {PaginationComponent} from "../../../components/pagination/pagination.component";
-import {Subject} from "rxjs";
+import {of, Subject, tap} from "rxjs";
 import {MatButtonToggle, MatButtonToggleGroup} from "@angular/material/button-toggle";
+import {CpfPipe} from "../../../shared/pipes/cpf.pipe";
+import {AtivoPipe} from "../../../shared/pipes/ativo.pipe";
+import {CnpjPipe} from "../../../shared/pipes/cnpj.pipe";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
+import {Monitorador, MonitoradorList} from "../../../shared/models/monitorador";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -39,17 +38,15 @@ export class pagination implements MatPaginatorIntl {
   }
 }
 
-interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+enum TipoPessoa {
+  Fisica = 1,
+  Juridica = 2
 }
 
 @Component({
   selector: 'app-listagem',
   standalone: true,
-  providers: [{provide: MatPaginatorIntl, useClass: pagination}],
+  providers: [MonitoradorService],
   imports: [
     MatTableModule,
     MatFormFieldModule,
@@ -68,44 +65,34 @@ interface PeriodicElement {
     PaginationComponent,
     MatButtonToggleGroup,
     MatButtonToggle,
-    MatIconButton
+    MatIconButton,
+    CpfPipe,
+    AtivoPipe,
+    CnpjPipe
   ],
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.css'
 })
 export class ListagemComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'acoes'];
-  dataSource!: MatTableDataSource<PeriodicElement>;
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-
+  displayedColumns: string[] = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'ativo', 'acoes'];
+  dataSource!: MatTableDataSource<any>;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   isCollapsed = true;
 
+  monitoradores!: Monitorador[];
+  constructor(private service: MonitoradorService) {
+  }
   ngOnInit(): void {
-    const elements: PeriodicElement[] = [
-      {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-      {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-      {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-      {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-      {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-      {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-      {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-      {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-      {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-      {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-      {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-      {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-      {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-      {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-      {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-      {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-      {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-      {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-    ];
+    this.montarTabela()
+  }
 
-    this.dataSource = new MatTableDataSource(elements);
-    this.dataSource.paginator = this.paginator;
+  montarTabela(){
+    this.service.getMonitoradores().subscribe(monitoradores => {
+      this.monitoradores = monitoradores;
+      this.dataSource = new MatTableDataSource<any>(this.monitoradores)
+    })
   }
 }
+
 
 

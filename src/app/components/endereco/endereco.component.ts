@@ -1,21 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {MonitoradorService} from "../../shared/services/monitorador.service";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-endereco',
   standalone: true,
-  providers: [MonitoradorService],
+  providers: [],
   imports: [],
   templateUrl: './endereco.component.html',
   styleUrl: './endereco.component.css'
 })
-export class EnderecoComponent implements OnInit {
-  constructor(private service: MonitoradorService) {
+export class EnderecoComponent {
 
-  }
-  ngOnInit(): void {
-    this.service.getCidade().subscribe(resposta => {
-      console.log(resposta);
-    });
-  }
 }
