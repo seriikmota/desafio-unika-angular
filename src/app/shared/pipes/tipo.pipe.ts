@@ -7,7 +7,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TipoPipe implements PipeTransform {
 
   transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+    if (value == 'FISICA')
+      return "Física"
+    else if (value == 'JURIDICA')
+      return 'Jurídica'
+    else
+      return ''
   }
 
 }

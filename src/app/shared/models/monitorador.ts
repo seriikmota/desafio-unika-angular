@@ -1,12 +1,9 @@
-import {Endereco} from "./endereco"
-enum TipoPessoa {
-  Fisica = "FISICAA",
-  Juridica = "JURIDICAA"
-}
+// @ts-ignore
 
+import {Endereco} from "./endereco"
 export interface Monitorador {
   id: number
-  tipo: TipoPessoa
+  tipo: string
   cnpj: string
   razao: string
   inscricao: string
@@ -16,6 +13,7 @@ export interface Monitorador {
   email: string
   data: string
   ativo: boolean
+  enderecos?: Endereco[]
 }
+export interface Monitoradores extends Array<Monitorador>{}
 
-export interface MonitoradorList extends Array<Monitorador>{}
