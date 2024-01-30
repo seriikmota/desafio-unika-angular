@@ -4,11 +4,13 @@
 
   <form [formGroup]="form">
 
-    <div class="row">
-      <div class="col-4">
+    <h2>Informações</h2>
+
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+      <div fxLayout="column" fxFlex>
         <mat-form-field>
           <mat-label>Tipo de Pessoa</mat-label>
-          <mat-select formControlName="tipo">
+          <mat-select formControlName="tipo"> <!-- (selectionChange)="onChangeTipo()" -->
             <mat-option value="FISICA">Física</mat-option>
             <mat-option value="JURIDICA">Jurídica</mat-option>
           </mat-select>
@@ -17,11 +19,20 @@
           }
         </mat-form-field>
       </div>
+      <div fxLayout="column" fxFlex="20">
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="ativo"> <!-- (selectionChange)="onChangeTipo()" -->
+            <mat-option value="true">Ativo</mat-option>
+            <mat-option value="false">Inativo</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
-    <div class="row">
-      <div class="col-4">
-        <mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+      <div fxLayout="column" fxFlex>
+        <mat-form-field *ngIf="isJuridica()">
           <mat-label>CNPJ</mat-label>
           <input matInput placeholder="00.000.000/0000-00" formControlName="cnpj">
           @if (this.form.controls['cnpj'].invalid) {
@@ -30,8 +41,8 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4">
-        <mat-form-field>
+      <div fxLayout="column" fxFlex>
+        <mat-form-field *ngIf="isJuridica()">
           <mat-label>Razão Social</mat-label>
           <input matInput formControlName="razao">
           @if (this.form.controls['razao'].invalid) {
@@ -40,8 +51,8 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4">
-        <mat-form-field>
+      <div fxLayout="column" fxFlex>
+        <mat-form-field *ngIf="isJuridica()">
           <mat-label>Inscrição Estadual</mat-label>
           <input matInput formControlName="inscricao">
           @if (this.form.controls['inscricao'].invalid) {
@@ -51,9 +62,9 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-4">
-        <mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+      <div fxLayout="column" fxFlex>
+        <mat-form-field *ngIf="isFisica()">
           <mat-label>CPF</mat-label>
           <input matInput placeholder="000.000.000-00" formControlName="cpf">
           @if (this.form.controls['cpf'].invalid) {
@@ -62,8 +73,8 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4">
-        <mat-form-field>
+      <div fxLayout="column" fxFlex>
+        <mat-form-field *ngIf="isFisica()">
           <mat-label>Nome</mat-label>
           <input matInput formControlName="nome">
           @if (this.form.controls['nome'].invalid) {
@@ -72,8 +83,8 @@
         </mat-form-field>
       </div>
 
-      <div class="col-4">
-        <mat-form-field>
+      <div fxLayout="column" fxFlex>
+        <mat-form-field *ngIf="isFisica()">
           <mat-label>RG</mat-label>
           <input matInput formControlName="rg">
           @if (this.form.controls['rg'].invalid) {
@@ -83,24 +94,23 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-5">
-        <mat-form-field class="example-form-field">
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+      <div fxLayout="column" fxFlex="25">
+        <mat-form-field>
           <mat-label>Data</mat-label>
-          <input matInput [matDatepicker]="datepicker" placeholder="dd/MM/yyyy" formControlName="data">
-          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
-          <mat-datepicker #datepicker>
-          </mat-datepicker>
+          <input matInput [matDatepicker]="picker" formControlName="data">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
           @if (this.form.controls['data'].invalid) {
             <mat-error>A Data é obrigatória!</mat-error>
           }
         </mat-form-field>
       </div>
 
-      <div class="col-7">
-        <mat-form-field style="width: 100%">
+      <div fxLayout="column" fxFlex>
+        <mat-form-field>
           <mat-label>Email</mat-label>
-          <input matInput placeholder="email@example.com" formControlName="email" required>
+          <input matInput placeholder="email@example.com" formControlName="email">
           @if (this.form.controls['email'].invalid) {
             <mat-error>O Email é obrigatório!</mat-error>
           }
@@ -108,13 +118,90 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <mat-label>Status: </mat-label>
-        <mat-radio-group formControlName="ativo">
-          <mat-radio-button value=true>Sim</mat-radio-button>
-          <mat-radio-button value=false>Não</mat-radio-button>
-        </mat-radio-group>
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+      <div fxLayout="column" fxFlex="20">
+      </div>
+    </div>
+
+
+    <div formGroupName="enderecos" class="mt-3">
+
+      <h2>Endereço</h2>
+
+      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlex="25">
+          <mat-form-field>
+            <mat-label>CEP</mat-label>
+            <input matInput formControlName="cep">
+            <mat-icon matSuffix><i class="fa-solid fa-magnifying-glass"></i></mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlex>
+          <mat-form-field>
+            <mat-label>Endereço</mat-label>
+            <input matInput formControlName="endereco">
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxFlex="15">
+          <mat-form-field>
+            <mat-label>Número</mat-label>
+            <input matInput formControlName="numero">
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxFlex>
+          <mat-form-field>
+            <mat-label>Bairro</mat-label>
+            <input matInput formControlName="bairro">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlex>
+          <mat-form-field>
+            <mat-label>Cidade</mat-label>
+            <input matInput formControlName="cidade">
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxFlex="20">
+          <mat-form-field>
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado"> <!-- (selectionChange)="onChangeTipo()" -->
+              <mat-option value="1">GO</mat-option>
+              <mat-option value="2">SP</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxFlex="25">
+          <mat-form-field>
+            <mat-label>Telefone</mat-label>
+            <input matInput formControlName="telefone">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="10px">
+        <div fxLayout="column" fxFlex>
+          <mat-form-field>
+            <mat-label>Monitorador</mat-label>
+            <mat-select formControlName="monitorador"> <!-- (selectionChange)="onChangeTipo()" -->
+              <mat-option value="1">Joao</mat-option>
+              <mat-option value="2">Maria</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxFlex="20">
+          <mat-form-field>
+            <mat-label>Principal</mat-label>
+            <mat-select formControlName="principal"> <!-- (selectionChange)="onChangeTipo()" -->
+              <mat-option value="true">Sim</mat-option>
+              <mat-option value="false">Não</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </form>

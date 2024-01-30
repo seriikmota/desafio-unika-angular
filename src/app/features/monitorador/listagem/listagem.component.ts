@@ -21,6 +21,7 @@ import {TipoPipe} from "../../../shared/pipes/tipo.pipe";
 import {MatSort} from "@angular/material/sort";
 import {CadastroComponent} from "../cadastro/cadastro.component";
 import {MatDialog} from "@angular/material/dialog";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -69,7 +70,8 @@ export class pagination implements MatPaginatorIntl {
     AtivoPipe,
     CnpjPipe,
     TipoPipe,
-    MatSort
+    MatSort,
+    FlexLayoutModule
   ],
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.css'
@@ -101,10 +103,7 @@ export class ListagemComponent implements OnInit {
   }
 
   openCadastrar(){
-    this.dialog.open(CadastroComponent,{
-      width:'700px',
-      height:'500px'
-    })
+    this.dialog.open(CadastroComponent,{})
   }
 }
 
