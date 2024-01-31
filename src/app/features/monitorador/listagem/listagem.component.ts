@@ -21,7 +21,11 @@ import {TipoPipe} from "../../../shared/pipes/tipo.pipe";
 import {MatSort} from "@angular/material/sort";
 import {CadastroComponent} from "../cadastro/cadastro.component";
 import {MatDialog} from "@angular/material/dialog";
-import {FlexLayoutModule} from "@angular/flex-layout";
+import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
+import {ModalImportarComponent} from "../../../components/modal-importar/modal-importar.component";
+import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {EditarComponent} from "../editar/editar.component";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -46,7 +50,7 @@ export class pagination implements MatPaginatorIntl {
 @Component({
   selector: 'app-listagem',
   standalone: true,
-  providers: [MonitoradorService],
+  providers: [{provide: MatPaginatorIntl, useClass: pagination}, MonitoradorService],
   imports: [
     MatTableModule,
     MatFormFieldModule,
@@ -71,28 +75,88 @@ export class pagination implements MatPaginatorIntl {
     CnpjPipe,
     TipoPipe,
     MatSort,
-    FlexLayoutModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.css'
 })
 export class ListagemComponent implements OnInit {
-  isCollapsed = true;
+  filtroAtual!: string;
+  filtroForm!: FormGroup
+  displayedColumns: string[];
+  isCollapsed: boolean = true;
   monitoradores: Monitoradores;
-  displayedColumns: string[] = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'ativo', 'acoes'];
   dataSource: MatTableDataSource<Monitorador>;
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  constructor(private service: MonitoradorService, private dialog:MatDialog) {
-    this.monitoradores = []
+  constructor(private service: MonitoradorService,
+              private dialog:MatDialog,
+              private formBuilder: FormBuilder) {
+    this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'ativo', 'acoes'];
+    this.monitoradores = [];
     this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
   }
+
   ngOnInit(): void {
     this.service.getList().subscribe(monitoradores => {
       this.monitoradores = monitoradores;
-      this.ordenar(monitoradores)
-      this.dataSource = new MatTableDataSource<any>(this.monitoradores)
+      this.ordenar(monitoradores);
+      this.dataSource = new MatTableDataSource<any>(this.monitoradores);
+      this.dataSource.paginator = this.paginator;
+    });
+
+    this.filtroForm = this.formBuilder.group({
+      texto: [''],
+      tipo: [''],
+      ativo: ['']
+    });
+
+    this.filtroForm.valueChanges.subscribe(filtros => {
+      this.service.getFilter(filtros).subscribe(monitoradores => {
+        this.filtroAtual = filtros;
+        this.ordenar(monitoradores);
+        this.dataSource.data = monitoradores;
+      })
     })
+  }
+
+  openCadastrar(){
+    this.dialog.open(CadastroComponent,{
+      width: '700px'
+    });
+  }
+
+  onEditar() {
+    this.dialog.open(CadastroComponent, {
+      width: '700px'
+    })
+  }
+
+  onPdf(id: any) {
+    this.service.getPdf(id, this.filtroAtual);
+  }
+
+  onExcel(id: any) {
+    this.service.getExcel(id, this.filtroAtual);
+  }
+
+  openErro() {
+    this.dialog.open(ModalErroComponent, {
+      width: '390px',
+    });
+  }
+  openImportar() {
+    this.dialog.open(ModalImportarComponent, {
+      width: '550px',
+    });
+  }
+
+  openExcluir(id: string) {
+    console.log(id)
+    this.dialog.open(ModalExcluirComponent, {
+      width: '390px',
+    });
   }
 
   ordenar(monitoradores: Monitoradores){
@@ -100,10 +164,6 @@ export class ListagemComponent implements OnInit {
     monitoradores.sort((a, b) => (a.nome < b.nome) ? -1 : 1);
     monitoradores.sort((a, b) => (a.razao < b.razao) ? -1 : 1);
     monitoradores.sort((a, b) => (a.ativo < b.ativo) ? -1 : 1);
-  }
-
-  openCadastrar(){
-    this.dialog.open(CadastroComponent,{})
   }
 }
 

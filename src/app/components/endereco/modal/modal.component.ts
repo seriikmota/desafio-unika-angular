@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
@@ -17,7 +16,6 @@ import {MatButton} from "@angular/material/button";
   imports: [
     MatDialogTitle,
     MatDialogContent,
-    FlexLayoutModule,
     MatFormFieldModule,
     MatSelect,
     MatOption,

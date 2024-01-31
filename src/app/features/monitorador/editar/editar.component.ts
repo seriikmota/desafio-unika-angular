@@ -1,46 +1,46 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatButtonModule} from "@angular/material/button";
-import {MatSelectModule} from "@angular/material/select";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CnpjPipe} from "../../../shared/pipes/cnpj.pipe";
-import {Monitorador} from "../../../shared/models/monitorador";
-import {NgIf} from "@angular/common";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatButton} from "@angular/material/button";
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
-import {MatList, MatListItem} from "@angular/material/list";
-import {MatDivider} from "@angular/material/divider";
+import {MatInput} from "@angular/material/input";
+import {MatOption} from "@angular/material/autocomplete";
+import {MatSelect} from "@angular/material/select";
+import {NgIf} from "@angular/common";
+import {Monitorador} from "../../../shared/models/monitorador";
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
 
 @Component({
-  selector: 'app-cadastro',
+  selector: 'app-editar',
   standalone: true,
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}, provideNativeDateAdapter()],
   imports: [
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatRadioGroup,
-    MatRadioButton,
-    MatDatepickerModule,
     FormsModule,
-    CnpjPipe,
-    ReactiveFormsModule,
-    NgIf,
+    MatButton,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogTitle,
+    MatError,
+    MatFormField,
     MatIcon,
-    MatList,
-    MatListItem,
-    MatDivider
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    MatSuffix,
+    NgIf,
+    ReactiveFormsModule
   ],
-  templateUrl: './cadastro.component.html',
-  styleUrl: './cadastro.component.css'
+  templateUrl: './editar.component.html',
+  styleUrl: './editar.component.css'
 })
-export class CadastroComponent implements OnInit {
+export class EditarComponent implements OnInit {
   form!: FormGroup
 
   constructor(private formBuilder: FormBuilder) {
@@ -58,7 +58,7 @@ export class CadastroComponent implements OnInit {
       data: ['', Validators.required],
       email: ['', Validators.required],
       ativo: ['', Validators.required],
-      enderecos : this.formBuilder.group({
+      enderecos: this.formBuilder.group({
         cep: ['', Validators.required],
         endereco: ['', Validators.required],
         numero: ['', Validators.required],
@@ -124,7 +124,7 @@ export class CadastroComponent implements OnInit {
 
   formatarData(data: string) {
     const formatDate = (date: string): string => {
-      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
       // @ts-ignore
       const formatter = new Intl.DateTimeFormat('pt-BR', options);
       // @ts-ignore

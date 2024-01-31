@@ -17,4 +17,4 @@ import {HttpClientModule} from "@angular/common/http";
     HttpClientModule
   ]
 })
-export class MonitoradorModule { }
+export class MonitoradorModule {}

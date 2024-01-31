@@ -24,17 +24,41 @@ export class MonitoradorService {
   getList() {
     return this.http.get<Monitoradores>(this.baseUrl);
   }
-  getFilter(path: string) {
+  getFilter(filtros: any) {
+    let path = this.makePath(null, filtros)
     return this.http.get<Monitoradores>(`${this.baseUrl}/filtrar${path}`);
   }
-  getPdf(path: string) {
-    return this.http.get(`${this.baseUrl}/relatorioPdf${path}`)
+  getPdf(id: any, filtros: any) {
+    let path = this.makePath(id, filtros)
+    window.open(`${this.baseUrl}/relatorioPdf${path}`);
   }
-  getExcel(path: string) {
-    return this.http.get(`${this.baseUrl}/relatorioExcel${path}`)
+  getExcel(id: any, filtros: any) {
+    let path = this.makePath(id, filtros)
+    window.open(`${this.baseUrl}/relatorioExcel${path}`);
   }
   getModelImport() {
-    return this.http.get(`${this.baseUrl}/importar/modelo`)
+    window.open(`${this.baseUrl}/importar/modelo`);
+  }
+
+  makePath(id: any, filtros: any){
+    let path;
+    if (id != null)
+      path = `?id=${id}`;
+    else if (filtros == undefined)
+      path = ''
+    else {
+      let text = filtros.texto;
+      let tipo = filtros.tipo;
+      let ativo = filtros.ativo;
+      if (text == undefined)
+        text = ''
+      if (tipo == undefined)
+        tipo = ''
+      if (ativo == undefined)
+        ativo = ''
+      path = `?text=${text}&tipo=${tipo}&ativo=${ativo}`
+    }
+    return path
   }
 
 }
