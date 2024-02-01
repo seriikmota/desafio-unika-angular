@@ -23,6 +23,9 @@ import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {CadastrarComponent} from "../cadastrar/cadastrar.component";
 import {EditarComponent} from "../editar/editar.component";
+import {NgForOf} from "@angular/common";
+import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
+import {end} from "@popperjs/core";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -65,7 +68,8 @@ export class pagination implements MatPaginatorIntl {
     CepPipe,
     TelefonePipe,
     PrincipalPipe,
-    MonitoradorPipe
+    MonitoradorPipe,
+    NgForOf
   ],
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.css'
@@ -78,6 +82,9 @@ export class ListagemComponent implements OnInit {
   filtroForm!: FormGroup
   enderecos: Enderecos;
   dataSource: MatTableDataSource<Endereco>;
+  estados!: string[];
+  cidades!: string[];
+  monitoradores!: Monitoradores;
 
   constructor(private service: EnderecoService,
               private monitoradorService: MonitoradorService,
@@ -138,15 +145,12 @@ export class ListagemComponent implements OnInit {
 
   getEnderecos(filtros: string) {
     this.service.getList(filtros).subscribe(enderecos => {
-      this.enderecos = enderecos
+      this.enderecos = enderecos;
 
       this.monitoradorService.getList().subscribe(monitoradores => {
-        let monitoradorList = monitoradores;
-
         this.enderecos.forEach(endereco => {
-          const monitorador = monitoradorList.find(monitorador =>
-            // @ts-ignore
-            monitorador.enderecos.some(enderecoMonitorador => enderecoMonitorador.cep === endereco.cep)
+          const monitorador = monitoradores.find(monitorador =>
+            monitorador.enderecos?.some(enderecoMonitorador => enderecoMonitorador.cep === endereco.cep)
           );
           if (monitorador) {
             endereco.monitorador = monitorador;
@@ -163,6 +167,19 @@ export class ListagemComponent implements OnInit {
     enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
     enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
     enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
+  }
+
+  getFieldsFilter(){
+    this.estados = this.enderecos.map(endereco => endereco.estado);
+    this.estados = this.estados.filter((estado, index, self) => self.indexOf(estado) === index);
+    this.estados.sort();
+    this.cidades = this.enderecos.map(endereco => endereco.cidade);
+    this.cidades = this.cidades.filter((cidade, index, self) => self.indexOf(cidade) === index);
+    this.cidades.sort();
+    this.monitoradores = this.enderecos.map(endereco => endereco.monitorador);
+    this.monitoradores = this.monitoradores.filter((monitorador, index, self) => self.indexOf(monitorador) === index);
+    this.monitoradores.sort();
+    console.log('GETS: ' + this.estados + ' - ' + this.enderecos + ' - ' + this.monitoradores)
   }
 
 }

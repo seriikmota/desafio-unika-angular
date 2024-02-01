@@ -23,6 +23,8 @@ import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.comp
 import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
 import {ImportarComponent} from "../importar/importar.component";
+import {Enderecos} from "../../../shared/models/endereco";
+import {HttpClientModule} from "@angular/common/http";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -65,7 +67,8 @@ export class pagination implements MatPaginatorIntl {
     MatTableModule,
     ReactiveFormsModule,
     TipoPipe,
-    NgbCollapse
+    NgbCollapse,
+    HttpClientModule
   ],
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.css'
@@ -156,6 +159,7 @@ export class ListagemComponent implements OnInit {
     monitoradores.sort((a, b) => (a.razao < b.razao) ? -1 : 1);
     monitoradores.sort((a, b) => (a.ativo < b.ativo) ? -1 : 1);
   }
+
 }
 
 

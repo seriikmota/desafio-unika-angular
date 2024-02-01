@@ -14,27 +14,24 @@
             <mat-form-field style="width: 110px">
               <mat-label>Estado</mat-label>
               <mat-select formControlName="estado">
-                <mat-option value="SP">SP</mat-option>
-                <mat-option value="GO">GO</mat-option>
-                <mat-option>Nenhum</mat-option>
+                <mat-option>Escolha</mat-option>
+                <mat-option *ngFor="let estado of estados" value="cidade">{{estado}}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field style="width: 250px">
               <mat-label>Cidade</mat-label>
               <mat-select formControlName="cidade">
-                <mat-option value="Anapolis">Anápolis</mat-option>
-                <mat-option value="Goiania">Goiânia</mat-option>
-                <mat-option>Nenhum</mat-option>
+                <mat-option>Escolha</mat-option>
+                <mat-option *ngFor="let cidade of cidades" value="cidade">{{cidade}}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field style="width: 250px">
               <mat-label>Monitorador</mat-label>
               <mat-select formControlName="monitorador">
-                <mat-option value="1">João</mat-option>
-                <mat-option value="2">Maria</mat-option>
-                <mat-option>Nenhum</mat-option>
+                <mat-option>Escolha</mat-option>
+                <mat-option *ngFor="let monitorador of monitoradores" value="cidade">{{monitorador | monitorador}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
