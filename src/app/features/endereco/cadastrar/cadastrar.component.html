@@ -1,0 +1,101 @@
+<h1 mat-dialog-title>Cadastrar Endereço</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="cadastrarForm">
+    <h2>Endereço</h2>
+
+    <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
+
+    <div *ngIf="feedbackSuccess" class="notify-success" [innerHTML]='feedbackMessage'></div>
+
+    <div class="row">
+      <div class="col-8">
+        <mat-form-field>
+          <mat-label>CEP</mat-label>
+          <input matInput formControlName="cep">
+          <mat-icon matSuffix><i class="fa-solid fa-magnifying-glass"></i></mat-icon>
+          <mat-error>CEP é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+        <mat-form-field>
+          <mat-label>Endereço</mat-label>
+          <input matInput formControlName="endereco">
+          <mat-error>Endereço é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <mat-form-field>
+          <mat-label>Número</mat-label>
+          <input matInput formControlName="numero">
+          <mat-error>Obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <mat-form-field>
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="bairro">
+          <mat-error>Bairro é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+        <mat-form-field>
+          <mat-label>Cidade</mat-label>
+          <input matInput formControlName="cidade">
+          <mat-error>Cidade é obrigatória!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <mat-form-field>
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado"> <!-- (selectionChange)="onChangeTipo()" -->
+            <mat-option *ngFor="let estado of estados;" [value]="estado">{{estado}}</mat-option>
+          </mat-select>
+          <mat-error>Obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <mat-form-field>
+          <mat-label>Telefone</mat-label>
+          <input matInput formControlName="telefone">
+          <mat-error>Telefone é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-9">
+        <mat-form-field>
+          <mat-label>Monitorador</mat-label>
+          <mat-select formControlName="monitorador"> <!-- (selectionChange)="onChangeTipo()" -->
+            <mat-option *ngFor="let monitorador of monitoradores;" [value]="monitorador">{{monitorador | monitorador}}</mat-option>
+          </mat-select>
+          <mat-error>Monitorador é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-3">
+        <mat-form-field>
+          <mat-label>Principal</mat-label>
+          <mat-select formControlName="principal"> <!-- (selectionChange)="onChangeTipo()" -->
+            <mat-option value="true">Sim</mat-option>
+            <mat-option value="false">Não</mat-option>
+          </mat-select>
+          <mat-error>Principal é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fechar</button>
+  <button mat-button (click)="onSubmit(cadastrarForm.value)" [disabled]="!cadastrarForm.valid" color="primary">Cadastrar</button>
+</div>

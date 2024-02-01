@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {Monitorador, Monitoradores} from "../models/monitorador";
-import {Endereco} from "../models/endereco";
+import {Monitorador} from "../models/monitorador";
 
 @Pipe({
   name: 'monitorador',

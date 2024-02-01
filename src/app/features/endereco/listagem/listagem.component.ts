@@ -21,6 +21,7 @@ import {TelefonePipe} from "../../../shared/pipes/telefone.pipe";
 import {PrincipalPipe} from "../../../shared/pipes/principal.pipe";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
+import {CadastrarComponent} from "../cadastrar/cadastrar.component";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -93,8 +94,8 @@ export class ListagemComponent implements OnInit {
       texto: [''],
       estado: [''],
       cidade: [''],
-      monitorador: ['']
-    });
+      monitorador: [''],
+    })
 
     this.filtroForm.valueChanges.subscribe(filtros => {
       this.getEnderecos(filtros);
@@ -102,9 +103,9 @@ export class ListagemComponent implements OnInit {
   }
 
   openCadastrar() {
-    /*this.dialog.open(CadastrarComponent, {
+    this.dialog.open(CadastrarComponent, {
       width: '700px'
-    });*/
+    });
   }
 
   onEditar(endereco: Endereco) {
