@@ -1,31 +1,28 @@
 import {Component, Injectable, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatTableModule} from "@angular/material/table";
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
-import {NgbCollapseModule} from "@ng-bootstrap/ng-bootstrap";
-import {MatOption} from "@angular/material/autocomplete";
-import {MatSelectModule} from "@angular/material/select";
-import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
-import {MatPaginator, MatPaginatorIntl, MatPaginatorModule} from "@angular/material/paginator";
-import {PaginationComponent} from "../../../components/pagination/pagination.component";
-import {Subject} from "rxjs";
-import {MatButtonToggle, MatButtonToggleGroup} from "@angular/material/button-toggle";
-import {CpfPipe} from "../../../shared/pipes/cpf.pipe";
 import {AtivoPipe} from "../../../shared/pipes/ativo.pipe";
 import {CnpjPipe} from "../../../shared/pipes/cnpj.pipe";
+import {CpfPipe} from "../../../shared/pipes/cpf.pipe";
+import {MatButton} from "@angular/material/button";
+import {MatTableModule, MatTableDataSource} from "@angular/material/table";
+import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatIcon} from "@angular/material/icon";
+import {MatInput} from "@angular/material/input";
+import {MatOption} from "@angular/material/autocomplete";
+import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
+import {MatSelect} from "@angular/material/select";
+import {MatSort} from "@angular/material/sort";
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {TipoPipe} from "../../../shared/pipes/tipo.pipe";
+import {Subject} from "rxjs";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
-import {TipoPipe} from "../../../shared/pipes/tipo.pipe";
-import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
+import {CadastrarComponent} from "../cadastrar/cadastrar.component";
+import {EditarComponent} from "../editar/editar.component";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 import {ModalImportarComponent} from "../../../components/modal-importar/modal-importar.component";
 import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {EditarComponent} from "../editar/editar.component";
-import {CadastrarComponent} from "../cadastrar/cadastrar.component";
+import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -52,43 +49,35 @@ export class pagination implements MatPaginatorIntl {
   standalone: true,
   providers: [{provide: MatPaginatorIntl, useClass: pagination}, MonitoradorService],
   imports: [
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButton,
-    MatIcon,
-    NgbCollapseModule,
-    MatOption,
-    MatSelectModule,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelTitle,
-    MatExpansionPanelDescription,
-    MatExpansionPanelHeader,
-    MatPaginatorModule,
-    PaginationComponent,
-    MatButtonToggleGroup,
-    MatButtonToggle,
-    MatIconButton,
-    CpfPipe,
     AtivoPipe,
     CnpjPipe,
-    TipoPipe,
+    CpfPipe,
+    MatButton,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatOption,
+    MatPaginator,
+    MatSelect,
     MatSort,
-    FormsModule,
-    ReactiveFormsModule
+    MatSuffix,
+    MatTableModule,
+    ReactiveFormsModule,
+    TipoPipe,
+    NgbCollapse
   ],
   templateUrl: './listagem.component.html',
   styleUrl: './listagem.component.css'
 })
 export class ListagemComponent implements OnInit {
-  filtroAtual!: string;
-  filtroForm!: FormGroup
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   displayedColumns: string[];
   isCollapsed: boolean = true;
+  filtroAtual!: string;
+  filtroForm!: FormGroup;
   monitoradores: Monitoradores;
   dataSource: MatTableDataSource<Monitorador>;
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   constructor(private service: MonitoradorService,
               private dialog:MatDialog,
@@ -147,6 +136,7 @@ export class ListagemComponent implements OnInit {
       width: '390px',
     });
   }
+
   openImportar() {
     this.dialog.open(ModalImportarComponent, {
       width: '550px',
