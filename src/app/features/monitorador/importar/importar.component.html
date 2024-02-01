@@ -2,7 +2,7 @@
 
 <div mat-dialog-content>
 
-    <label class="form-label">Se já possui o arquivo, insira no local abaixo</label>
+  <label class="form-label">Se já possui o arquivo, insira no local abaixo</label>
 
   <form>
     <div class="input-group">
@@ -11,13 +11,9 @@
     </div>
   </form>
 
-  <div class="notify-error">
-    O monitorador não pode ter endereço cadastrado!
-  </div>
+  <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
 
-  <div class="notify-success">
-    Monitorador excluido com sucesso!
-  </div>
+  <div *ngIf="feedbackSuccess" class="notify-success" [innerHTML]='feedbackMessage'></div>
 
   <hr class="border-2">
 

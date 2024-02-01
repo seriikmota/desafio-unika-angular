@@ -20,9 +20,9 @@ import {MatDialog} from "@angular/material/dialog";
 import {CadastrarComponent} from "../cadastrar/cadastrar.component";
 import {EditarComponent} from "../editar/editar.component";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
-import {ModalImportarComponent} from "../../../components/modal-importar/modal-importar.component";
 import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
+import {ImportarComponent} from "../importar/importar.component";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -138,7 +138,7 @@ export class ListagemComponent implements OnInit {
   }
 
   openImportar() {
-    this.dialog.open(ModalImportarComponent, {
+    this.dialog.open(ImportarComponent, {
       width: '550px',
     });
   }
