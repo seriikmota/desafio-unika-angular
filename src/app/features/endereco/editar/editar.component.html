@@ -1,7 +1,8 @@
-<h1 mat-dialog-title>Cadastrar Endereço</h1>
+<p>editar works!</p>
+<h1 mat-dialog-title>Editar Endereço</h1>
 
 <div mat-dialog-content>
-  <form [formGroup]="cadastrarForm">
+  <form [formGroup]="editarForm">
     <h2>Endereço</h2>
 
     <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
@@ -97,5 +98,5 @@
 
 <div mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Fechar</button>
-  <button mat-button (click)="onSubmit(cadastrarForm.value)" [disabled]="!cadastrarForm.valid" color="primary">Cadastrar</button>
+  <button mat-button (click)="onSubmit(editarForm.value)" [disabled]="!editarForm.valid" color="warn">Editar</button>
 </div>

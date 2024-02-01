@@ -10,7 +10,7 @@
             <mat-icon matSuffix><i class="fa-solid fa-magnifying-glass"></i></mat-icon>
           </mat-form-field>
 
-          <div #collapse="ngbCollapse" [(ngbCollapse)]="!isCollapsed">
+          <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
             <mat-form-field style="width: 110px">
               <mat-label>Estado</mat-label>
               <mat-select formControlName="estado">
@@ -48,7 +48,6 @@
     </div>
 
     <div class="col-3 d-flex justify-content-end align-self-start mt-2">
-      <button mat-raised-button color="primary" (click)="onPdf(null)" class="me-1">Testando</button>
       <button mat-raised-button color="primary" (click)="onPdf(null)" class="me-1">PDF</button>
       <button mat-raised-button color="primary" (click)="onExcel(null)" class="me-1">Excel</button>
       <button mat-raised-button color="primary" (click)="openCadastrar()">Cadastrar</button>

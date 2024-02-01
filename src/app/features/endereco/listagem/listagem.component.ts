@@ -22,6 +22,7 @@ import {PrincipalPipe} from "../../../shared/pipes/principal.pipe";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {CadastrarComponent} from "../cadastrar/cadastrar.component";
+import {EditarComponent} from "../editar/editar.component";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -109,10 +110,10 @@ export class ListagemComponent implements OnInit {
   }
 
   onEditar(endereco: Endereco) {
-    /*this.dialog.open(EditarComponent, {
+    this.dialog.open(EditarComponent, {
       width: '700px',
       data: endereco
-    });*/
+    });
   }
 
   openExcluir(id: string) {

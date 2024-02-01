@@ -122,8 +122,8 @@
           <mat-form-field>
             <mat-label>Principal</mat-label>
             <mat-select formControlName="principal"> <!-- (selectionChange)="onChangeTipo()" -->
-              <mat-option value="true">Sim</mat-option>
-              <mat-option value="false">Não</mat-option>
+              <mat-option [value]="true">Sim</mat-option>
+              <mat-option [value]="false">Não</mat-option>
             </mat-select>
             <mat-error>Principal é obrigatório!</mat-error>
           </mat-form-field>
