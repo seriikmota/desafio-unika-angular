@@ -19,13 +19,13 @@ import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
 import {TipoPipe} from "../../../shared/pipes/tipo.pipe";
 import {MatSort} from "@angular/material/sort";
-import {CadastroComponent} from "../cadastro/cadastro.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 import {ModalImportarComponent} from "../../../components/modal-importar/modal-importar.component";
 import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EditarComponent} from "../editar/editar.component";
+import {CadastrarComponent} from "../cadastrar/cadastrar.component";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -122,13 +122,13 @@ export class ListagemComponent implements OnInit {
   }
 
   openCadastrar(){
-    this.dialog.open(CadastroComponent,{
+    this.dialog.open(CadastrarComponent,{
       width: '700px'
     });
   }
 
   onEditar() {
-    this.dialog.open(CadastroComponent, {
+    this.dialog.open(EditarComponent, {
       width: '700px'
     })
   }

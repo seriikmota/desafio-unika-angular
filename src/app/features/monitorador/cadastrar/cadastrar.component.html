@@ -2,8 +2,12 @@
 
 <div mat-dialog-content>
 
-  <form [formGroup]="form">
+  <form [formGroup]="cadastrarForm">
     <h2>Informações</h2>
+
+    <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
+
+    <div *ngIf="feedbackSuccess" class="notify-success" [innerHTML]='feedbackMessage'></div>
 
     <div class="row">
       <div class="col-9">
@@ -13,18 +17,17 @@
             <mat-option value="FISICA">Física</mat-option>
             <mat-option value="JURIDICA">Jurídica</mat-option>
           </mat-select>
-          @if (this.form.controls['tipo'].invalid) {
-            <mat-error>O Tipo da Pessoa é obrigatório!</mat-error>
-          }
+          <mat-error>Tipo da Pessoa é obrigatório!</mat-error>
         </mat-form-field>
       </div>
       <div class="col-3">
         <mat-form-field>
           <mat-label>Status</mat-label>
-          <mat-select formControlName="ativo"> <!-- (selectionChange)="onChangeTipo()" -->
-            <mat-option value="true">Ativo</mat-option>
-            <mat-option value="false">Inativo</mat-option>
+          <mat-select formControlName="ativo">
+            <mat-option [value]="true">Ativo</mat-option>
+            <mat-option [value]="false">Inativo</mat-option>
           </mat-select>
+          <mat-error>Status obrigatório!</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -34,9 +37,7 @@
         <mat-form-field *ngIf="isJuridica()">
           <mat-label>CNPJ</mat-label>
           <input matInput placeholder="00.000.000/0000-00" formControlName="cnpj">
-          @if (this.form.controls['cnpj'].invalid) {
-            <mat-error>O CNPJ é obrigatório!</mat-error>
-          }
+          <mat-error>CNPJ é obrigatório!</mat-error>
         </mat-form-field>
       </div>
 
@@ -44,9 +45,7 @@
         <mat-form-field *ngIf="isJuridica()">
           <mat-label>Razão Social</mat-label>
           <input matInput formControlName="razao">
-          @if (this.form.controls['razao'].invalid) {
-            <mat-error>A Razão Social é obrigatória!</mat-error>
-          }
+          <mat-error>Razão Social é obrigatória!</mat-error>
         </mat-form-field>
       </div>
 
@@ -54,9 +53,7 @@
         <mat-form-field *ngIf="isJuridica()">
           <mat-label>Inscrição Estadual</mat-label>
           <input matInput formControlName="inscricao">
-          @if (this.form.controls['inscricao'].invalid) {
-            <mat-error>A IE é obrigatório!</mat-error>
-          }
+          <mat-error>IE é obrigatório!</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -66,9 +63,7 @@
         <mat-form-field *ngIf="isFisica()">
           <mat-label>CPF</mat-label>
           <input matInput placeholder="000.000.000-00" formControlName="cpf">
-          @if (this.form.controls['cpf'].invalid) {
-            <mat-error>O CPF é obrigatório!</mat-error>
-          }
+          <mat-error>CPF é obrigatório!</mat-error>
         </mat-form-field>
       </div>
 
@@ -76,9 +71,7 @@
         <mat-form-field *ngIf="isFisica()">
           <mat-label>Nome</mat-label>
           <input matInput formControlName="nome">
-          @if (this.form.controls['nome'].invalid) {
-            <mat-error>O Nome é obrigatório!</mat-error>
-          }
+          <mat-error>Nome é obrigatório!</mat-error>
         </mat-form-field>
       </div>
 
@@ -86,9 +79,7 @@
         <mat-form-field *ngIf="isFisica()">
           <mat-label>RG</mat-label>
           <input matInput formControlName="rg">
-          @if (this.form.controls['rg'].invalid) {
-            <mat-error>O RG é obrigatório!</mat-error>
-          }
+          <mat-error>RG é obrigatório!</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -100,9 +91,7 @@
           <input matInput [matDatepicker]="picker" formControlName="data">
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-          @if (this.form.controls['data'].invalid) {
-            <mat-error>A Data é obrigatória!</mat-error>
-          }
+          <mat-error>Data é obrigatória!</mat-error>
         </mat-form-field>
       </div>
 
@@ -110,9 +99,7 @@
         <mat-form-field>
           <mat-label>Email</mat-label>
           <input matInput placeholder="email@example.com" formControlName="email">
-          @if (this.form.controls['email'].invalid) {
-            <mat-error>O Email é obrigatório!</mat-error>
-          }
+          <mat-error>Email é obrigatório!</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -128,6 +115,17 @@
             <mat-label>CEP</mat-label>
             <input matInput formControlName="cep">
             <mat-icon matSuffix><i class="fa-solid fa-magnifying-glass"></i></mat-icon>
+            <mat-error>CEP é obrigatório!</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field>
+            <mat-label>Principal</mat-label>
+            <mat-select formControlName="principal"> <!-- (selectionChange)="onChangeTipo()" -->
+              <mat-option value="true">Sim</mat-option>
+              <mat-option value="false">Não</mat-option>
+            </mat-select>
+            <mat-error>Principal é obrigatório!</mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -137,18 +135,21 @@
           <mat-form-field>
             <mat-label>Endereço</mat-label>
             <input matInput formControlName="endereco">
+            <mat-error>Endereço é obrigatório!</mat-error>
           </mat-form-field>
         </div>
         <div class="col-3">
           <mat-form-field>
             <mat-label>Número</mat-label>
             <input matInput formControlName="numero">
+            <mat-error>Obrigatório!</mat-error>
           </mat-form-field>
         </div>
         <div class="col-4">
           <mat-form-field>
             <mat-label>Bairro</mat-label>
             <input matInput formControlName="bairro">
+            <mat-error>Bairro é obrigatório!</mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -158,6 +159,7 @@
           <mat-form-field>
             <mat-label>Cidade</mat-label>
             <input matInput formControlName="cidade">
+            <mat-error>Cidade é obrigatória!</mat-error>
           </mat-form-field>
         </div>
         <div class="col-3">
@@ -167,33 +169,14 @@
               <mat-option value="1">GO</mat-option>
               <mat-option value="2">SP</mat-option>
             </mat-select>
+            <mat-error>Obrigatório!</mat-error>
           </mat-form-field>
         </div>
         <div class="col-4">
           <mat-form-field>
             <mat-label>Telefone</mat-label>
             <input matInput formControlName="telefone">
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-9">
-          <mat-form-field>
-            <mat-label>Monitorador</mat-label>
-            <mat-select formControlName="monitorador"> <!-- (selectionChange)="onChangeTipo()" -->
-              <mat-option value="1">Joao</mat-option>
-              <mat-option value="2">Maria</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-3">
-          <mat-form-field>
-            <mat-label>Principal</mat-label>
-            <mat-select formControlName="principal"> <!-- (selectionChange)="onChangeTipo()" -->
-              <mat-option value="true">Sim</mat-option>
-              <mat-option value="false">Não</mat-option>
-            </mat-select>
+            <mat-error>Telefone é obrigatório!</mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -203,5 +186,5 @@
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Fechar</button>
-  <button mat-button (click)="onSubmit(form.value)" [disabled]="!form.valid" color="primary">Cadastrar</button>
+  <button mat-button (click)="onSubmit(cadastrarForm.value)" [disabled]="!cadastrarForm.valid" color="primary">Cadastrar</button>
 </div>
