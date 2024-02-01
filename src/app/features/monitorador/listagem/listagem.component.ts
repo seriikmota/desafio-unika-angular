@@ -127,9 +127,10 @@ export class ListagemComponent implements OnInit {
     });
   }
 
-  onEditar() {
+  onEditar(monitorador: Monitorador) {
     this.dialog.open(EditarComponent, {
-      width: '700px'
+      width: '700px',
+      data: monitorador
     })
   }
 

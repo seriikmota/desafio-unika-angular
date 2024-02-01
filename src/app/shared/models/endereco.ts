@@ -12,4 +12,4 @@ export interface Endereco {
   monitorador: Monitorador
 }
 
-export interface EnderecoList extends Array<Endereco>{}
+export interface Enderecos extends Array<Endereco>{}
