@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 
 import {EnderecoRoutingModule} from './endereco-routing.module';
 import {HttpClientModule} from "@angular/common/http";
-import {ListagemEnderecoComponent} from "./listagem-endereco/listagem-endereco.component";
 
 
 @NgModule({
@@ -11,7 +10,6 @@ import {ListagemEnderecoComponent} from "./listagem-endereco/listagem-endereco.c
   imports: [
     CommonModule,
     EnderecoRoutingModule,
-    ListagemEnderecoComponent,
     HttpClientModule
   ]
 })

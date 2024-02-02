@@ -2,7 +2,7 @@ import {Component, Injectable, OnInit, ViewChild} from '@angular/core';
 import {AtivoPipe} from "../../../shared/pipes/ativo.pipe";
 import {CnpjPipe} from "../../../shared/pipes/cnpj.pipe";
 import {CpfPipe} from "../../../shared/pipes/cpf.pipe";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatFabButton, MatMiniFabButton} from "@angular/material/button";
 import {MatTableModule, MatTableDataSource} from "@angular/material/table";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
@@ -26,26 +26,7 @@ import {ListagemEnderecoComponent} from "../../endereco/listagem-endereco/listag
 import {CadastrarMonitoradorComponent} from "../cadastrar-monitorador/cadastrar-monitorador.component";
 import {EditarMonitoradorComponent} from "../editar-monitorador/editar-monitorador.component";
 import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-monitorador.component";
-
-@Injectable()
-export class pagination implements MatPaginatorIntl {
-  changes = new Subject<void>();
-
-  firstPageLabel = $localize`Primeira página`;
-  itemsPerPageLabel = $localize`Itens por página:`;
-  lastPageLabel = $localize`Ultima página`;
-
-  nextPageLabel = 'Próxima página';
-  previousPageLabel = 'Página anterior';
-
-  getRangeLabel(page: number, pageSize: number, length: number): string {
-    if (length === 0) {
-      return $localize`Página 1 de 1`;
-    }
-    const amountPages = Math.ceil(length / pageSize);
-    return $localize`Página ${page + 1} de ${amountPages}`;
-  }
-}
+import {pagination, PaginationComponent} from "../../../components/pagination/pagination.component";
 
 @Component({
   selector: 'app-listagem-monitorador',
@@ -69,7 +50,10 @@ export class pagination implements MatPaginatorIntl {
     MatTableModule,
     NgbCollapse,
     ReactiveFormsModule,
-    TipoPipe
+    TipoPipe,
+    MatFabButton,
+    MatMiniFabButton,
+    PaginationComponent
   ],
   templateUrl: './listagem-monitorador.component.html',
   styleUrl: './listagem-monitorador.component.css'
@@ -89,13 +73,14 @@ export class ListagemMonitoradorComponent implements OnInit {
     this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes'];
     this.monitoradores = [];
     this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
     this.service.getList().subscribe(monitoradores => {
       this.monitoradores = monitoradores;
       this.ordenar(monitoradores);
-      this.dataSource = new MatTableDataSource<any>(this.monitoradores);
+      this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
       this.dataSource.paginator = this.paginator;
     });
 
@@ -112,6 +97,7 @@ export class ListagemMonitoradorComponent implements OnInit {
         this.dataSource.data = monitoradores;
       })
     })
+
   }
 
   openCadastrar(){
@@ -161,9 +147,11 @@ export class ListagemMonitoradorComponent implements OnInit {
     monitoradores.sort((a, b) => (a.ativo < b.ativo) ? -1 : 1);
   }
 
-  openEnderecos(enderecos: Enderecos){
+  openEnderecos(id: any, enderecos: Enderecos){
+    console.log(id, enderecos)
     this.dialog.open(ListagemEnderecoComponent, {
-      width: '1000px'
+      width: '1100px',
+      data: {monitorador: id, enderecos: enderecos}
     })
   }
 

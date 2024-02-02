@@ -29,6 +29,7 @@ export class EnderecoService {
   }
   getFilter(filtros: any) {
     let path = this.makePath(null, filtros)
+    console.log(path)
     return this.http.get<Enderecos>(`${this.baseUrl}/filtrar${path}`);
   }
   getPdf(id: any, filtros: any) {

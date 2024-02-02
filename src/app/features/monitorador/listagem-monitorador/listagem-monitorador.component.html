@@ -4,7 +4,7 @@
 
       <div>
         <form [formGroup]="filtroForm" style="display: flex">
-          <mat-form-field class="example-full-width" style="width: 450px">
+          <mat-form-field style="width: 450px">
             <mat-label>Pesquisar</mat-label>
             <input matInput placeholder="Ex. Cpf, Cnpj, Nome ou Razao" style="flex-grow: 1" formControlName="texto">
             <mat-icon matSuffix><i class="fa-solid fa-magnifying-glass"></i></mat-icon>
@@ -83,7 +83,7 @@
           <th mat-header-cell *matHeaderCellDef> Endereços</th>
           <td mat-cell *matCellDef="let element">
 
-            <button class="btn btn-sm btn-secondary badge" type="button" (click)="openEnderecos(element.enderecos)"><i class="fa-solid fa-file-pdf icone"></i></button>
+            <button type="button" class="btn btn-sm btn-primary rounded-pill" (click)="openEnderecos(element.id, element.enderecos)">{{element.enderecos.length}} <i class="fa-solid fa-location-dot"></i></button>
 
           </td>
         </ng-container>
@@ -97,11 +97,14 @@
           <th mat-header-cell *matHeaderCellDef> Ações</th>
           <td mat-cell *matCellDef="let element">
             <div class="btn-group align-top text-dark">
-              <button class="btn btn-sm btn-secondary badge" type="button" (click)="onPdf(element.id)"><i class="fa-solid fa-file-pdf icone"></i>
+              <button class="btn btn-sm btn-secondary badge" type="button" (click)="onPdf(element.id)"><i
+                class="fa-solid fa-file-pdf icone"></i>
               </button>
-              <button class="btn btn-sm btn-secondary badge" type="button" (click)="onExcel(element.id)"><i class="fa-solid fa-file-excel icone"></i>
+              <button class="btn btn-sm btn-secondary badge" type="button" (click)="onExcel(element.id)"><i
+                class="fa-solid fa-file-excel icone"></i>
               </button>
-              <button class="btn btn-sm btn-warning badge" type="button" (click)="onEditar(element)"><i class="fa-solid fa-pen-to-square icone"></i>
+              <button class="btn btn-sm btn-warning badge" type="button" (click)="onEditar(element)"><i
+                class="fa-solid fa-pen-to-square icone"></i>
               </button>
               <button class="btn btn-sm btn-danger badge" type="button" (click)="openExcluir(element.id)"><i
                 class="fa-solid fa-trash icone"></i></button>

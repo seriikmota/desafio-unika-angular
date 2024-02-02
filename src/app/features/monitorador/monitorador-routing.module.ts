@@ -3,8 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {ListagemMonitoradorComponent} from "./listagem-monitorador/listagem-monitorador.component";
 
 const routes: Routes = [
-  {path: '', redirectTo: 'listagem', pathMatch: 'full'},
-  {path: 'listagem', component: ListagemMonitoradorComponent},
+  {path: '', component: ListagemMonitoradorComponent}
 ];
 
 @NgModule({

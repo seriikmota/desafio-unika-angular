@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {ListagemEnderecoComponent} from "./listagem-endereco/listagem-endereco.component";
 
-const routes: Routes = [
-  {path: '', component: ListagemEnderecoComponent},
-];
+const routes: Routes = [];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
