@@ -121,7 +121,7 @@
         <div class="col-4">
           <mat-form-field>
             <mat-label>Principal</mat-label>
-            <mat-select formControlName="principal"> <!-- (selectionChange)="onChangeTipo()" -->
+            <mat-select formControlName="principal">
               <mat-option [value]="true">Sim</mat-option>
               <mat-option [value]="false">Não</mat-option>
             </mat-select>
@@ -165,9 +165,8 @@
         <div class="col-3">
           <mat-form-field>
             <mat-label>Estado</mat-label>
-            <mat-select formControlName="estado"> <!-- (selectionChange)="onChangeTipo()" -->
-              <mat-option value="1">GO</mat-option>
-              <mat-option value="2">SP</mat-option>
+            <mat-select formControlName="estado">
+              <mat-option *ngFor="let estado of estados;" [value]="estado">{{estado}}</mat-option>
             </mat-select>
             <mat-error>Obrigatório!</mat-error>
           </mat-form-field>

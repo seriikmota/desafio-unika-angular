@@ -46,19 +46,16 @@ export class EditarEnderecoComponent implements OnInit {
   feedbackSuccess: boolean;
   feedbackMessage: string;
   estados: string[];
-  monitoradores!: Monitoradores
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: Endereco,
               private formBuilder: FormBuilder,
-              private service: EnderecoService,
-              private monitoradorService: MonitoradorService) {
+              private service: EnderecoService) {
     this.feedbackError = false;
     this.feedbackSuccess = false;
     this.feedbackMessage = '';
     this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
       'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
-    this.getMonitoradores()
     this.editarForm = this.formBuilder.group({
       cep: [this.data.cep, Validators.required],
       endereco: [this.data.endereco, Validators.required],
@@ -67,7 +64,6 @@ export class EditarEnderecoComponent implements OnInit {
       cidade: [this.data.cidade, Validators.required],
       estado: [this.data.estado, Validators.required],
       telefone: [this.data.telefone, Validators.required],
-      monitorador: [this.data.monitorador.id, Validators.required],
       principal: [this.data.principal, Validators.required],
     });
   }
@@ -86,12 +82,6 @@ export class EditarEnderecoComponent implements OnInit {
 
   onSubmit(endereco: Endereco) {
     console.log(endereco)
-  }
-
-  getMonitoradores() {
-    this.monitoradorService.getList().subscribe(monitoradores => {
-      this.monitoradores = monitoradores
-    })
   }
 
 }

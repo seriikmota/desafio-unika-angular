@@ -7,7 +7,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
 import {Monitorador} from "../../../shared/models/monitorador";
@@ -34,7 +34,8 @@ import {HttpClientModule} from "@angular/common/http";
     MatSelect,
     MatSuffix,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgForOf
   ],
   templateUrl: './cadastrar-monitorador.component.html',
   styleUrl: './cadastrar-monitorador.component.css'
@@ -44,6 +45,7 @@ export class CadastrarMonitoradorComponent {
   feedbackError: boolean;
   feedbackSuccess: boolean;
   feedbackMessage: string;
+  estados: string[];
 
   constructor(private formBuilder: FormBuilder,
               private service: MonitoradorService) {
@@ -74,6 +76,8 @@ export class CadastrarMonitoradorComponent {
         principal: ['', Validators.required],
       })
     })
+    this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
   }
 
   onSubmit(monitorador: Monitorador) {

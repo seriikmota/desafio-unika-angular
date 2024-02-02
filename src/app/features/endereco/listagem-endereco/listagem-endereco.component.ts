@@ -27,7 +27,7 @@ import {HttpClientModule} from "@angular/common/http";
 @Component({
   selector: 'app-listagem-endereco',
   standalone: true,
-  providers: [EnderecoService, MonitoradorService],
+  providers: [EnderecoService],
   imports: [
     HttpClientModule,
     MatButton,
@@ -63,7 +63,6 @@ export class ListagemEnderecoComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { monitorador: number, enderecos: Enderecos },
               private service: EnderecoService,
-              private monitoradorService: MonitoradorService,
               private dialog: MatDialog,
               private formBuilder: FormBuilder) {
     this.displayedColumns = ['cep', 'endereco', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'principal', 'acoes'];

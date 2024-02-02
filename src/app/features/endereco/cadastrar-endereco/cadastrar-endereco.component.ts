@@ -48,11 +48,9 @@ export class CadastrarEnderecoComponent implements OnInit {
   feedbackSuccess: boolean;
   feedbackMessage: string;
   estados: string[];
-  monitoradores!: Monitoradores
 
   constructor(private formBuilder: FormBuilder,
-              private service: EnderecoService,
-              private monitoradorService: MonitoradorService) {
+              private service: EnderecoService) {
     this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
       'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
     this.feedbackError = false;
@@ -67,7 +65,6 @@ export class CadastrarEnderecoComponent implements OnInit {
       cidade: ['', Validators.required],
       estado: ['', Validators.required],
       telefone: ['', Validators.required],
-      monitorador: ['', Validators.required],
       principal: ['', Validators.required],
     });
   }
@@ -82,18 +79,10 @@ export class CadastrarEnderecoComponent implements OnInit {
           this.cadastrarForm.controls['estado'].setValue(endereco.estado)
         })
     })
-
-    this.getMonitoradores()
   }
 
   onSubmit(endereco: Endereco) {
     console.log(endereco)
-  }
-
-  getMonitoradores(){
-    this.monitoradorService.getList().subscribe(monitoradores => {
-      this.monitoradores = monitoradores
-    })
   }
 
 }

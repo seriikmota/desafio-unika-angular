@@ -9,13 +9,9 @@
     </label>
   </div>
 
-  <div class="notify-error">
-    O monitorador não pode ter endereço cadastrado!
-  </div>
+  <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
 
-  <div class="notify-success">
-    Monitorador excluido com sucesso!
-  </div>
+  <div *ngIf="feedbackSuccess" class="notify-success" [innerHTML]='feedbackMessage'></div>
 
 </div>
 

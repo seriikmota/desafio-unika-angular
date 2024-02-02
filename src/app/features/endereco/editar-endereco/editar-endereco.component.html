@@ -18,6 +18,16 @@
           <mat-error>CEP é obrigatório!</mat-error>
         </mat-form-field>
       </div>
+      <div class="col-4">
+        <mat-form-field>
+          <mat-label>Principal</mat-label>
+          <mat-select formControlName="principal">
+            <mat-option [value]="true">Sim</mat-option>
+            <mat-option [value]="false">Não</mat-option>
+          </mat-select>
+          <mat-error>Principal é obrigatório!</mat-error>
+        </mat-form-field>
+      </div>
     </div>
 
     <div class="row">
@@ -66,28 +76,6 @@
           <mat-label>Telefone</mat-label>
           <input matInput formControlName="telefone">
           <mat-error>Telefone é obrigatório!</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-9">
-        <mat-form-field>
-          <mat-label>Monitorador</mat-label>
-          <mat-select formControlName="monitorador">
-            <mat-option *ngFor="let monitorador of monitoradores;" [value]="monitorador.id">{{monitorador | monitorador}}</mat-option>
-          </mat-select>
-          <mat-error>Monitorador é obrigatório!</mat-error>
-        </mat-form-field>
-      </div>
-      <div class="col-3">
-        <mat-form-field>
-          <mat-label>Principal</mat-label>
-          <mat-select formControlName="principal">
-            <mat-option [value]="true">Sim</mat-option>
-            <mat-option [value]="false">Não</mat-option>
-          </mat-select>
-          <mat-error>Principal é obrigatório!</mat-error>
         </mat-form-field>
       </div>
     </div>
