@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
-import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
@@ -14,6 +14,9 @@ import {EnderecoService} from "../../../shared/services/endereco.service";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {Endereco} from "../../../shared/models/endereco";
 import {HttpClientModule} from "@angular/common/http";
+import {DialogRef} from "@angular/cdk/dialog";
+import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
+import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 
 @Component({
   selector: 'app-editar-endereco',
@@ -47,7 +50,9 @@ export class EditarEnderecoComponent implements OnInit {
   feedbackMessage: string;
   estados: string[];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Endereco,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {endereco: Endereco, idM: number},
+              private dialogRef: DialogRef<ListagemEnderecoComponent>,
+              private dialog: MatDialog,
               private formBuilder: FormBuilder,
               private service: EnderecoService) {
     this.feedbackError = false;
@@ -57,14 +62,14 @@ export class EditarEnderecoComponent implements OnInit {
       'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
     this.editarForm = this.formBuilder.group({
-      cep: [this.data.cep, Validators.required],
-      endereco: [this.data.endereco, Validators.required],
-      numero: [this.data.numero, Validators.required],
-      bairro: [this.data.bairro, Validators.required],
-      cidade: [this.data.cidade, Validators.required],
-      estado: [this.data.estado, Validators.required],
-      telefone: [this.data.telefone, Validators.required],
-      principal: [this.data.principal, Validators.required],
+      cep: [this.data.endereco.cep, Validators.required],
+      endereco: [this.data.endereco.endereco, Validators.required],
+      numero: [this.data.endereco.numero, Validators.required],
+      bairro: [this.data.endereco.bairro, Validators.required],
+      cidade: [this.data.endereco.cidade, Validators.required],
+      estado: [this.data.endereco.estado, Validators.required],
+      telefone: [this.data.endereco.telefone, Validators.required],
+      principal: [this.data.endereco.principal, Validators.required],
     });
   }
 
@@ -81,7 +86,32 @@ export class EditarEnderecoComponent implements OnInit {
   }
 
   onSubmit(endereco: Endereco) {
-    console.log(endereco)
+    try {
+      this.service.postRegister(endereco, this.data.idM).subscribe({
+        error: (e) => {
+          this.feedbackSuccess = false;
+          this.feedbackError = true;
+          this.feedbackMessage = e.error;
+        },
+        complete: () => {
+          this.feedbackSuccess = false;
+          this.feedbackError = true;
+          this.feedbackMessage = 'Endereço editado com sucesso!';
+          setTimeout(() => {
+            this.dialogRef.close();
+          }, 1500);
+        }
+      })
+    } catch (error) {
+      this.openErro('Ocorreu um erro ao enviar a requisição!')
+    }
+  }
+
+  openErro(message: string) {
+    this.dialog.open(ModalErroComponent, {
+      width: '390px',
+      data: message
+    });
   }
 
 }

@@ -13,12 +13,10 @@ import {MatSelect} from "@angular/material/select";
 import {MatSort} from "@angular/material/sort";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {TipoPipe} from "../../../shared/pipes/tipo.pipe";
-import {Subject} from "rxjs";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
 import {MatDialog} from "@angular/material/dialog";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
-import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
 import {Enderecos} from "../../../shared/models/endereco";
 import {HttpClientModule} from "@angular/common/http";
@@ -27,6 +25,7 @@ import {CadastrarMonitoradorComponent} from "../cadastrar-monitorador/cadastrar-
 import {EditarMonitoradorComponent} from "../editar-monitorador/editar-monitorador.component";
 import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-monitorador.component";
 import {pagination, PaginationComponent} from "../../../components/pagination/pagination.component";
+import {ExcluirMonitoradorComponent} from "../excluir-monitorador/excluir-monitorador.component";
 
 @Component({
   selector: 'app-listagem-monitorador',
@@ -134,9 +133,9 @@ export class ListagemMonitoradorComponent implements OnInit {
   }
 
   openExcluir(id: string) {
-    console.log(id)
-    this.dialog.open(ModalExcluirComponent, {
+    this.dialog.open(ExcluirMonitoradorComponent, {
       width: '390px',
+      data: id
     });
   }
 

@@ -11,18 +11,17 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
-import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
 import {Endereco, Enderecos} from "../../../shared/models/endereco";
 import {EnderecoService} from "../../../shared/services/endereco.service";
 import {CepPipe} from "../../../shared/pipes/cep.pipe";
 import {TelefonePipe} from "../../../shared/pipes/telefone.pipe";
 import {PrincipalPipe} from "../../../shared/pipes/principal.pipe";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
-import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {NgForOf} from "@angular/common";
 import {CadastrarEnderecoComponent} from "../cadastrar-endereco/cadastrar-endereco.component";
 import {EditarEnderecoComponent} from "../editar-endereco/editar-endereco.component";
 import {HttpClientModule} from "@angular/common/http";
+import {ExcluirEnderecoComponent} from "../excluir-endereco/excluir-endereco.component";
 
 @Component({
   selector: 'app-listagem-endereco',
@@ -83,6 +82,34 @@ export class ListagemEnderecoComponent implements OnInit {
     });
   }
 
+  getEnderecos(filtros: string) {
+    try {
+      this.service.getFilter(filtros).subscribe(enderecos => {
+        this.enderecos = enderecos;
+        this.ordenar(this.enderecos)
+        this.dataSource = new MatTableDataSource<any>(this.enderecos);
+      });
+    } catch (error) {
+      this.openErro('Ocorreu um erro ao enviar a requisição!')
+    }
+  }
+
+  ordenar(enderecos: Enderecos) {
+    enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
+    enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
+    enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
+  }
+
+  getFieldsFilter() {
+    this.estados = this.enderecos.map(endereco => endereco.estado);
+    this.estados = this.estados.filter((estado, index, self) => self.indexOf(estado) === index);
+    this.estados.sort();
+    this.cidades = this.enderecos.map(endereco => endereco.cidade);
+    this.cidades = this.cidades.filter((cidade, index, self) => self.indexOf(cidade) === index);
+    this.cidades.sort();
+    console.log('GETS: ' + this.estados + ' - ' + this.enderecos)
+  }
+
   openCadastrar() {
     this.dialog.open(CadastrarEnderecoComponent, {
       width: '700px'
@@ -97,8 +124,16 @@ export class ListagemEnderecoComponent implements OnInit {
   }
 
   openExcluir(id: string) {
-    this.dialog.open(ModalExcluirComponent, {
+    this.dialog.open(ExcluirEnderecoComponent, {
       width: '390px',
+      data: id
+    });
+  }
+
+  openErro(message: string) {
+    this.dialog.open(ModalErroComponent, {
+      width: '390px',
+      data: message
     });
   }
 
@@ -108,36 +143,6 @@ export class ListagemEnderecoComponent implements OnInit {
 
   onExcel(id: any) {
     this.service.getExcel(id, this.filtroAtual);
-  }
-
-  openErro() {
-    this.dialog.open(ModalErroComponent, {
-      width: '390px',
-    });
-  }
-
-  getEnderecos(filtros: string) {
-    this.service.getFilter(filtros).subscribe(enderecos => {
-      this.enderecos = enderecos;
-      this.ordenar(this.enderecos)
-      this.dataSource = new MatTableDataSource<any>(this.enderecos);
-    });
-  }
-
-  ordenar(enderecos: Enderecos) {
-    enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
-    enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
-    enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
-  }
-
-  getFieldsFilter(){
-    this.estados = this.enderecos.map(endereco => endereco.estado);
-    this.estados = this.estados.filter((estado, index, self) => self.indexOf(estado) === index);
-    this.estados.sort();
-    this.cidades = this.enderecos.map(endereco => endereco.cidade);
-    this.cidades = this.cidades.filter((cidade, index, self) => self.indexOf(cidade) === index);
-    this.cidades.sort();
-    console.log('GETS: ' + this.estados + ' - ' + this.enderecos)
   }
 
 }

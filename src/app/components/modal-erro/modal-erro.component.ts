@@ -1,14 +1,21 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle
+} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {NgIf} from "@angular/common";
+import {Endereco} from "../../shared/models/endereco";
 
 @Component({
   selector: 'app-modal-erro',
@@ -39,9 +46,8 @@ import {NgIf} from "@angular/common";
 })
 
 export class ModalErroComponent {
-  message: string = 'atualizar a lista!';
 
-  constructor() {}
+  constructor(@Inject(MAT_DIALOG_DATA) public message: string) {}
 
 
 }

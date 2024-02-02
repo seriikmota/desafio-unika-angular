@@ -11,11 +11,13 @@ export class MonitoradorService {
   constructor(private http: HttpClient) {
 
   }
-  postRegister(m: Monitorador){
-    return this.http.post<Monitorador>(this.baseUrl, m)
+  postRegister(m: Monitorador) {
+    m.data = this.formatDate(m.data)
+    return this.http.post<any>(this.baseUrl, m)
   }
   postImport(){}
   putEdit(id: number, m: Monitorador){
+    m.data = this.formatDate(m.data)
     return this.http.put<Monitorador>(`${this.baseUrl}/${id}`, m)
   }
   delete(id: number){
@@ -60,5 +62,13 @@ export class MonitoradorService {
     }
     return path
   }
+
+  formatDate(date: string){
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    // @ts-ignore
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    return formatter.format(Date.parse(date));
+  }
+
 
 }

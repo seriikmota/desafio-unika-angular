@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+
+  <div class="text-center">
+    <i class="fa-solid fa-trash"></i>
+    <h2>Você tem certeza?</h2>
+    <label>
+      Você realmente deseja excluir esse monitorador?
+      Este processo não pode ser desfeito.
+    </label>
+  </div>
+
+  <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
+
+  <div *ngIf="feedbackSuccess" class="notify-success" [innerHTML]='feedbackMessage'></div>
+
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fechar</button>
+  <button mat-button color="warn" (click)="onSubmit()">Excluir</button>
+</div>

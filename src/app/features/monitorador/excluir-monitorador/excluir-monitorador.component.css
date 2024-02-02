@@ -1,0 +1,32 @@
+
+i {
+  color: #B80000;
+  font-size: 60px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+h2 {
+  color: #606060
+}
+
+label {
+  color: #696969
+}
+
+.notify-error {
+  margin-top: 18px;
+  background-color: #FADDDD;
+  color: #893232;
+  padding: 8px;
+  border: 1px groove #f7cbcb;
+  border-radius: 5px;
+}
+
+.notify-success {
+  background-color: #D5F1DE;
+  color: #3D6E37;
+  padding: 8px;
+  border: 1px groove #c0eace;
+  border-radius: 5px;
+}

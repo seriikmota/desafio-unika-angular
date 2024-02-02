@@ -1,5 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {Component, Inject, OnInit} from '@angular/core';
+import {
+  MAT_DIALOG_DATA, MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogTitle
+} from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
@@ -12,8 +18,11 @@ import {EnderecoService} from "../../../shared/services/endereco.service";
 import {HttpClientModule} from "@angular/common/http";
 import {Endereco} from "../../../shared/models/endereco";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
-import {Monitoradores} from "../../../shared/models/monitorador";
+import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
+import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
+import {DialogRef} from "@angular/cdk/dialog";
+import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
 
 @Component({
   selector: 'app-cadastrar-endereco',
@@ -49,7 +58,10 @@ export class CadastrarEnderecoComponent implements OnInit {
   feedbackMessage: string;
   estados: string[];
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(@Inject(MAT_DIALOG_DATA) public mId: number,
+              private dialogRef: DialogRef<ListagemEnderecoComponent>,
+              private dialog: MatDialog,
+              private formBuilder: FormBuilder,
               private service: EnderecoService) {
     this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
       'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
@@ -82,7 +94,32 @@ export class CadastrarEnderecoComponent implements OnInit {
   }
 
   onSubmit(endereco: Endereco) {
-    console.log(endereco)
+    try {
+      this.service.postRegister(endereco, this.mId).subscribe({
+        error: (e) => {
+          this.feedbackSuccess = false;
+          this.feedbackError = true;
+          this.feedbackMessage = e.error;
+        },
+        complete: () => {
+          this.feedbackSuccess = false;
+          this.feedbackError = true;
+          this.feedbackMessage = 'Endereço cadastrado com sucesso!';
+          setTimeout(() => {
+            this.dialogRef.close();
+          }, 1500);
+        }
+      })
+    } catch (error) {
+      this.openErro('Ocorreu um erro ao enviar a requisição!')
+    }
+  }
+
+  openErro(message: string) {
+    this.dialog.open(ModalErroComponent, {
+      width: '390px',
+      data: message
+    });
   }
 
 }
