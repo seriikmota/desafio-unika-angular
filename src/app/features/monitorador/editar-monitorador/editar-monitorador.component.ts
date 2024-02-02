@@ -3,7 +3,6 @@ import {MatButton} from "@angular/material/button";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {MatFormField, MatLabel, MatSuffix, MatError} from "@angular/material/form-field";
-import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
@@ -15,7 +14,7 @@ import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {HttpClientModule} from "@angular/common/http";
 
 @Component({
-  selector: 'app-editar',
+  selector: 'app-editar-monitorador',
   standalone: true,
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}, provideNativeDateAdapter(), MonitoradorService],
   imports: [
@@ -27,7 +26,6 @@ import {HttpClientModule} from "@angular/common/http";
     MatDialogModule,
     MatError,
     MatFormField,
-    MatIcon,
     MatInput,
     MatLabel,
     MatOption,
@@ -36,10 +34,10 @@ import {HttpClientModule} from "@angular/common/http";
     NgIf,
     ReactiveFormsModule
   ],
-  templateUrl: './editar.component.html',
-  styleUrl: './editar.component.css'
+  templateUrl: './editar-monitorador.component.html',
+  styleUrl: './editar-monitorador.component.css'
 })
-export class EditarComponent {
+export class EditarMonitoradorComponent {
   editarForm!: FormGroup
   feedbackError: boolean;
   feedbackSuccess: boolean;
@@ -119,4 +117,5 @@ export class EditarComponent {
     const dateParts = data.split("/");
     return new Date(Number(dateParts[2]), Number(dateParts[1]) - 1, Number(dateParts[0]))
   }
+
 }

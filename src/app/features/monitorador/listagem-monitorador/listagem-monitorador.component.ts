@@ -17,14 +17,15 @@ import {Subject} from "rxjs";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
 import {MatDialog} from "@angular/material/dialog";
-import {CadastrarComponent} from "../cadastrar/cadastrar.component";
-import {EditarComponent} from "../editar/editar.component";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 import {ModalExcluirComponent} from "../../../components/modal-excluir/modal-excluir.component";
 import {NgbCollapse} from "@ng-bootstrap/ng-bootstrap";
-import {ImportarComponent} from "../importar/importar.component";
 import {Enderecos} from "../../../shared/models/endereco";
 import {HttpClientModule} from "@angular/common/http";
+import {ListagemEnderecoComponent} from "../../endereco/listagem-endereco/listagem-endereco.component";
+import {CadastrarMonitoradorComponent} from "../cadastrar-monitorador/cadastrar-monitorador.component";
+import {EditarMonitoradorComponent} from "../editar-monitorador/editar-monitorador.component";
+import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-monitorador.component";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -47,13 +48,14 @@ export class pagination implements MatPaginatorIntl {
 }
 
 @Component({
-  selector: 'app-listagem',
+  selector: 'app-listagem-monitorador',
   standalone: true,
   providers: [{provide: MatPaginatorIntl, useClass: pagination}, MonitoradorService],
   imports: [
     AtivoPipe,
     CnpjPipe,
     CpfPipe,
+    HttpClientModule,
     MatButton,
     MatFormField,
     MatIcon,
@@ -65,15 +67,14 @@ export class pagination implements MatPaginatorIntl {
     MatSort,
     MatSuffix,
     MatTableModule,
-    ReactiveFormsModule,
-    TipoPipe,
     NgbCollapse,
-    HttpClientModule
+    ReactiveFormsModule,
+    TipoPipe
   ],
-  templateUrl: './listagem.component.html',
-  styleUrl: './listagem.component.css'
+  templateUrl: './listagem-monitorador.component.html',
+  styleUrl: './listagem-monitorador.component.css'
 })
-export class ListagemComponent implements OnInit {
+export class ListagemMonitoradorComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   displayedColumns: string[];
   isCollapsed: boolean = true;
@@ -85,7 +86,7 @@ export class ListagemComponent implements OnInit {
   constructor(private service: MonitoradorService,
               private dialog:MatDialog,
               private formBuilder: FormBuilder) {
-    this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'ativo', 'acoes'];
+    this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes'];
     this.monitoradores = [];
     this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
   }
@@ -114,13 +115,13 @@ export class ListagemComponent implements OnInit {
   }
 
   openCadastrar(){
-    this.dialog.open(CadastrarComponent,{
+    this.dialog.open(CadastrarMonitoradorComponent,{
       width: '700px'
     });
   }
 
   onEditar(monitorador: Monitorador) {
-    this.dialog.open(EditarComponent, {
+    this.dialog.open(EditarMonitoradorComponent, {
       width: '700px',
       data: monitorador
     })
@@ -141,7 +142,7 @@ export class ListagemComponent implements OnInit {
   }
 
   openImportar() {
-    this.dialog.open(ImportarComponent, {
+    this.dialog.open(ImportarMonitoradorComponent, {
       width: '550px',
     });
   }
@@ -160,7 +161,10 @@ export class ListagemComponent implements OnInit {
     monitoradores.sort((a, b) => (a.ativo < b.ativo) ? -1 : 1);
   }
 
+  openEnderecos(enderecos: Enderecos){
+    this.dialog.open(ListagemEnderecoComponent, {
+      width: '1000px'
+    })
+  }
+
 }
-
-
-

@@ -16,17 +16,16 @@ import {Monitoradores} from "../../../shared/models/monitorador";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 
 @Component({
-  selector: 'app-cadastrar',
+  selector: 'app-cadastrar-endereco',
   standalone: true,
   providers: [EnderecoService, MonitoradorService],
   imports: [
-    MatDialogContent,
-    MatDialogTitle,
+    HttpClientModule,
     MatButton,
     MatDialogActions,
     MatDialogClose,
-    ReactiveFormsModule,
-    NgIf,
+    MatDialogContent,
+    MatDialogTitle,
     MatError,
     MatFormField,
     MatIcon,
@@ -35,14 +34,15 @@ import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
     MatOption,
     MatSelect,
     MatSuffix,
-    HttpClientModule,
+    MonitoradorPipe,
     NgForOf,
-    MonitoradorPipe
+    NgIf,
+    ReactiveFormsModule
   ],
-  templateUrl: './cadastrar.component.html',
-  styleUrl: './cadastrar.component.css'
+  templateUrl: './cadastrar-endereco.component.html',
+  styleUrl: './cadastrar-endereco.component.css'
 })
-export class CadastrarComponent implements OnInit {
+export class CadastrarEnderecoComponent implements OnInit {
   cadastrarForm!: FormGroup
   feedbackError: boolean;
   feedbackSuccess: boolean;
@@ -54,7 +54,7 @@ export class CadastrarComponent implements OnInit {
               private service: EnderecoService,
               private monitoradorService: MonitoradorService) {
     this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
-                    'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
+      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
     this.feedbackError = false;
     this.feedbackSuccess = false;
     this.feedbackMessage = '';

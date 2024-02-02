@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { EnderecoRoutingModule } from './endereco-routing.module';
-import {ListagemComponent} from "./listagem/listagem.component";
+import {EnderecoRoutingModule} from './endereco-routing.module';
 import {HttpClientModule} from "@angular/common/http";
+import {ListagemEnderecoComponent} from "./listagem-endereco/listagem-endereco.component";
 
 
 @NgModule({
@@ -11,8 +11,9 @@ import {HttpClientModule} from "@angular/common/http";
   imports: [
     CommonModule,
     EnderecoRoutingModule,
-    ListagemComponent,
+    ListagemEnderecoComponent,
     HttpClientModule
   ]
 })
-export class EnderecoModule { }
+export class EnderecoModule {
+}

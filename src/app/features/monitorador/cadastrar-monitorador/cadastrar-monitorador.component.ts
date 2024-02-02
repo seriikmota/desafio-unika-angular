@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
-import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {MatDialogModule} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
@@ -15,7 +15,7 @@ import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {HttpClientModule} from "@angular/common/http";
 
 @Component({
-  selector: 'app-cadastrar',
+  selector: 'app-cadastrar-monitorador',
   standalone: true,
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}, provideNativeDateAdapter(), MonitoradorService],
   imports: [
@@ -24,10 +24,7 @@ import {HttpClientModule} from "@angular/common/http";
     MatDatepicker,
     MatDatepickerInput,
     MatDatepickerToggle,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogContent,
-    MatDialogTitle,
+    MatDialogModule,
     MatError,
     MatFormField,
     MatIcon,
@@ -39,10 +36,10 @@ import {HttpClientModule} from "@angular/common/http";
     NgIf,
     ReactiveFormsModule
   ],
-  templateUrl: './cadastrar.component.html',
-  styleUrl: './cadastrar.component.css'
+  templateUrl: './cadastrar-monitorador.component.html',
+  styleUrl: './cadastrar-monitorador.component.css'
 })
-export class CadastrarComponent {
+export class CadastrarMonitoradorComponent {
   cadastrarForm!: FormGroup
   feedbackError: boolean;
   feedbackSuccess: boolean;

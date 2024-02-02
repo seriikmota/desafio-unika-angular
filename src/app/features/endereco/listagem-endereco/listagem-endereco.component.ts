@@ -5,7 +5,7 @@ import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
-import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
+import {MatPaginatorIntl, MatPaginator} from "@angular/material/paginator";
 import {MatSelect} from "@angular/material/select";
 import {MatSort} from "@angular/material/sort";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
@@ -21,11 +21,11 @@ import {TelefonePipe} from "../../../shared/pipes/telefone.pipe";
 import {PrincipalPipe} from "../../../shared/pipes/principal.pipe";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
-import {CadastrarComponent} from "../cadastrar/cadastrar.component";
-import {EditarComponent} from "../editar/editar.component";
 import {NgForOf} from "@angular/common";
-import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
-import {end} from "@popperjs/core";
+import {Monitoradores} from "../../../shared/models/monitorador";
+import {CadastrarEnderecoComponent} from "../cadastrar-endereco/cadastrar-endereco.component";
+import {EditarEnderecoComponent} from "../editar-endereco/editar-endereco.component";
+import {HttpClientModule} from "@angular/common/http";
 
 @Injectable()
 export class pagination implements MatPaginatorIntl {
@@ -48,10 +48,11 @@ export class pagination implements MatPaginatorIntl {
 }
 
 @Component({
-  selector: 'app-listagem',
+  selector: 'app-listagem-endereco',
   standalone: true,
   providers: [{provide: MatPaginatorIntl, useClass: pagination}, EnderecoService, MonitoradorService],
   imports: [
+    HttpClientModule,
     MatButton,
     MatFormField,
     MatIcon,
@@ -71,10 +72,10 @@ export class pagination implements MatPaginatorIntl {
     MonitoradorPipe,
     NgForOf
   ],
-  templateUrl: './listagem.component.html',
-  styleUrl: './listagem.component.css'
+  templateUrl: './listagem-endereco.component.html',
+  styleUrl: './listagem-endereco.component.css'
 })
-export class ListagemComponent implements OnInit {
+export class ListagemEnderecoComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   displayedColumns: string[];
   isCollapsed: boolean = true;
@@ -111,13 +112,13 @@ export class ListagemComponent implements OnInit {
   }
 
   openCadastrar() {
-    this.dialog.open(CadastrarComponent, {
+    this.dialog.open(CadastrarEnderecoComponent, {
       width: '700px'
     });
   }
 
   onEditar(endereco: Endereco) {
-    this.dialog.open(EditarComponent, {
+    this.dialog.open(EditarEnderecoComponent, {
       width: '700px',
       data: endereco
     });

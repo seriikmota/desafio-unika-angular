@@ -16,7 +16,7 @@ import {Endereco} from "../../../shared/models/endereco";
 import {HttpClientModule} from "@angular/common/http";
 
 @Component({
-  selector: 'app-editar',
+  selector: 'app-editar-endereco',
   standalone: true,
   providers: [EnderecoService, MonitoradorService],
   imports: [
@@ -37,10 +37,10 @@ import {HttpClientModule} from "@angular/common/http";
     NgIf,
     ReactiveFormsModule
   ],
-  templateUrl: './editar.component.html',
-  styleUrl: './editar.component.css'
+  templateUrl: './editar-endereco.component.html',
+  styleUrl: './editar-endereco.component.css'
 })
-export class EditarComponent implements OnInit {
+export class EditarEnderecoComponent implements OnInit {
   editarForm!: FormGroup
   feedbackError: boolean;
   feedbackSuccess: boolean;

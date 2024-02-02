@@ -2,25 +2,23 @@ import { Component } from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
-import {MatFormFieldModule} from "@angular/material/form-field";
 import {HttpClientModule} from "@angular/common/http";
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-importar',
+  selector: 'app-importar-monitorador',
   standalone: true,
   providers: [MonitoradorService],
   imports: [
-    MatDialogModule,
-    MatButton,
-    MatFormFieldModule,
     HttpClientModule,
+    MatButton,
+    MatDialogModule,
     NgIf
   ],
-  templateUrl: './importar.component.html',
-  styleUrl: './importar.component.css'
+  templateUrl: './importar-monitorador.component.html',
+  styleUrl: './importar-monitorador.component.css'
 })
-export class ImportarComponent {
+export class ImportarMonitoradorComponent {
   feedbackError: boolean;
   feedbackSuccess: boolean;
   feedbackMessage: string;
@@ -33,4 +31,5 @@ export class ImportarComponent {
   downloadModel(){
     this.service.getModelImport();
   }
+
 }
