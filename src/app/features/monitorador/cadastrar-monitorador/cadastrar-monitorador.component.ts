@@ -7,8 +7,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
-import {NgForOf, NgIf} from "@angular/common";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
 import {Monitorador} from "../../../shared/models/monitorador";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
@@ -22,7 +22,10 @@ import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-suc
 @Component({
   selector: 'app-cadastrar-monitorador',
   standalone: true,
-  providers: [{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}, provideNativeDateAdapter(), MonitoradorService, EnderecoService],
+  providers: [{
+    provide: MAT_DATE_LOCALE,
+    useValue: 'pt-BR'
+  }, provideNativeDateAdapter(), MonitoradorService, EnderecoService],
   imports: [
     HttpClientModule,
     MatButton,
@@ -41,7 +44,8 @@ import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-suc
     NgIf,
     ReactiveFormsModule,
     NgForOf,
-    CadastrarEnderecoComponent
+    CadastrarEnderecoComponent,
+    JsonPipe
   ],
   templateUrl: './cadastrar-monitorador.component.html',
   styleUrl: './cadastrar-monitorador.component.css'
@@ -56,7 +60,7 @@ export class CadastrarMonitoradorComponent implements OnInit {
               private dialog: MatDialog,
               private service: MonitoradorService,
               private enderecoService: EnderecoService,
-              private formBuilder: FormBuilder){
+              private formBuilder: FormBuilder) {
     this.feedbackError = false
     this.feedbackMessage = ''
 
@@ -71,7 +75,85 @@ export class CadastrarMonitoradorComponent implements OnInit {
       data: ['', Validators.required],
       email: ['', Validators.required],
       ativo: ['', Validators.required],
-      enderecos: this.formBuilder.group({
+      enderecos: this.formBuilder.array([
+        this.formBuilder.group({
+          cep: ['', Validators.required],
+          endereco: ['', Validators.required],
+          numero: ['', Validators.required],
+          bairro: ['', Validators.required],
+          cidade: ['', Validators.required],
+          estado: ['', Validators.required],
+          telefone: ['', Validators.required],
+          principal: ['', Validators.required],
+        })
+      ])
+    })
+    this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
+  }
+
+  ngOnInit() {
+    this.enderecos.get('0')?.get('cep')?.valueChanges.subscribe(cep => {
+      if (cep.replace(/[^0-9]/g, '').length == 8)
+        this.enderecoService.getCep(cep).subscribe(endereco => {
+          this.enderecos.get('0')?.get('endereco')?.setValue(endereco.endereco)
+          this.enderecos.get('0')?.get('bairro')?.setValue(endereco.bairro)
+          this.enderecos.get('0')?.get('cidade')?.setValue(endereco.cidade)
+          this.enderecos.get('0')?.get('estado')?.setValue(endereco.estado)
+        })
+    })
+  }
+
+  onSubmit(monitorador: Monitorador) {
+    console.log(monitorador)
+    try {
+      this.service.postRegister(monitorador).subscribe({
+        error: (e) => {
+          this.feedbackError = true
+          this.feedbackMessage = e.error
+        },
+        complete: () => {
+          this.feedbackError = false
+          this.dialogRef.close()
+          this.dialog.open(ModalSucessoComponent, {
+            width: '390px',
+            data: 'Monitorador cadastrado com sucesso!'
+          })
+        }
+      })
+    } catch (error) {
+      this.dialog.open(ModalErroComponent, {
+        width: '390px',
+        data: 'Ocorreu um erro ao enviar a requisição!'
+      });
+    }
+  }
+
+  onChangeTipo() {
+    if (this.cadastrarForm.controls['tipo'].value != 'JURIDICA') {
+      this.cadastrarForm.get('cpf')?.enable()
+      this.cadastrarForm.get('nome')?.enable()
+      this.cadastrarForm.get('rg')?.enable()
+      this.cadastrarForm.get('cnpj')?.disable()
+      this.cadastrarForm.get('razao')?.disable()
+      this.cadastrarForm.get('inscricao')?.disable()
+    } else {
+      this.cadastrarForm.get('cpf')?.disable()
+      this.cadastrarForm.get('nome')?.disable()
+      this.cadastrarForm.get('rg')?.disable()
+      this.cadastrarForm.get('cnpj')?.enable()
+      this.cadastrarForm.get('razao')?.enable()
+      this.cadastrarForm.get('inscricao')?.enable()
+    }
+  }
+
+  get enderecos() {
+    return this.cadastrarForm.get('enderecos') as FormArray;
+  }
+
+  addEndereco() {
+    this.enderecos.push(
+      this.formBuilder.group({
         cep: ['', Validators.required],
         endereco: ['', Validators.required],
         numero: ['', Validators.required],
@@ -81,64 +163,6 @@ export class CadastrarMonitoradorComponent implements OnInit {
         telefone: ['', Validators.required],
         principal: ['', Validators.required],
       })
-    })
-    this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
-      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
-  }
-
-  ngOnInit() {
-    this.cadastrarForm.get('enderecos.cep')?.valueChanges.subscribe(cep => {
-      if (cep.replace(/[^0-9]/g, '').length == 8)
-        this.enderecoService.getCep(cep).subscribe(endereco => {
-          this.cadastrarForm.get('enderecos.endereco')?.setValue(endereco.endereco)
-          this.cadastrarForm.get('enderecos.bairro')?.setValue(endereco.bairro)
-          this.cadastrarForm.get('enderecos.cidade')?.setValue(endereco.cidade)
-          this.cadastrarForm.get('enderecos.estado')?.setValue(endereco.estado)
-        })
-    })
-  }
-
-  onSubmit(monitorador: Monitorador) {
-    console.log(monitorador)
-    try {
-      this.service.postRegister(monitorador).subscribe({
-        error:(e) => {
-          this.feedbackError = true
-          this.feedbackMessage = e.error
-        },
-        complete:() => {
-          this.feedbackError = false
-          this.dialogRef.close()
-          this.dialog.open(ModalSucessoComponent, {
-            width: '390px',
-            data: 'Monitorador cadastrado com sucesso!'
-          })
-        }
-      })
-    } catch(error) {
-      this.dialog.open(ModalErroComponent, {
-        width: '390px',
-        data: 'Ocorreu um erro ao enviar a requisição!'
-      });
-    }
-  }
-
-  onChangeTipo() {
-    if(this.cadastrarForm.controls['tipo'].value != 'JURIDICA'){
-      this.cadastrarForm.get('cpf')?.enable()
-      this.cadastrarForm.get('nome')?.enable()
-      this.cadastrarForm.get('rg')?.enable()
-      this.cadastrarForm.get('cnpj')?.disable()
-      this.cadastrarForm.get('razao')?.disable()
-      this.cadastrarForm.get('inscricao')?.disable()
-    }
-    else{
-      this.cadastrarForm.get('cpf')?.disable()
-      this.cadastrarForm.get('nome')?.disable()
-      this.cadastrarForm.get('rg')?.disable()
-      this.cadastrarForm.get('cnpj')?.enable()
-      this.cadastrarForm.get('razao')?.enable()
-      this.cadastrarForm.get('inscricao')?.enable()
-    }
+    )
   }
 }
