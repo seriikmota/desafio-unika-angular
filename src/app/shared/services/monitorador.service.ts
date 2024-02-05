@@ -11,40 +11,54 @@ export class MonitoradorService {
   constructor(private http: HttpClient) {
 
   }
+
   postRegister(m: Monitorador) {
     m.data = this.formatDate(m.data)
     return this.http.post<any>(this.baseUrl, m)
   }
-  postImport(){}
-  putEdit(id: number, m: Monitorador){
+
+  postImport(file: any) {
+    const formData = new FormData();
+    formData.append('file', file)
+    return this.http.post<any>(`${this.baseUrl}/importar`, formData)
+  }
+
+  putEdit(id: number, m: Monitorador) {
     m.data = this.formatDate(m.data)
     return this.http.put<Monitorador>(`${this.baseUrl}/${id}`, m)
   }
-  delete(id: number){
+
+  delete(id: number) {
     return this.http.delete<Monitorador>(`${this.baseUrl}/${id}`)
   }
-  getList() {
-    return this.http.get<Monitoradores>(this.baseUrl);
+
+  getList(filtros: any) {
+    if (filtros == ''){
+      return this.http.get<Monitoradores>(this.baseUrl);
+    }
+    else {
+      let path = this.makePath('', filtros)
+      return this.http.get<Monitoradores>(`${this.baseUrl}/filtrar${path}`);
+    }
   }
-  getFilter(filtros: any) {
-    let path = this.makePath(null, filtros)
-    return this.http.get<Monitoradores>(`${this.baseUrl}/filtrar${path}`);
-  }
+
   getPdf(id: any, filtros: any) {
     let path = this.makePath(id, filtros)
     window.open(`${this.baseUrl}/relatorioPdf${path}`);
   }
+
   getExcel(id: any, filtros: any) {
     let path = this.makePath(id, filtros)
     window.open(`${this.baseUrl}/relatorioExcel${path}`);
   }
+
   getModelImport() {
     window.open(`${this.baseUrl}/importar/modelo`);
   }
 
-  makePath(id: any, filtros: any){
+  makePath(id: any, filtros: any) {
     let path;
-    if (id != null)
+    if (id != '')
       path = `?id=${id}`;
     else if (filtros == undefined)
       path = ''
@@ -63,8 +77,8 @@ export class MonitoradorService {
     return path
   }
 
-  formatDate(date: string){
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  formatDate(date: string) {
+    const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
     // @ts-ignore
     const formatter = new Intl.DateTimeFormat('en-US', options);
     return formatter.format(Date.parse(date));

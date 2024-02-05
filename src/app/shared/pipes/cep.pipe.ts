@@ -10,7 +10,7 @@ export class CepPipe implements PipeTransform {
     if (value == null)
       return ''
 
-    let valorFormatado = (value + '').replace(/[^0-9]/g, '');
+    let valorFormatado = (value + '').replace(/[^0-9]/g, '')
 
     valorFormatado = valorFormatado
       .padStart(8, '0')
@@ -18,7 +18,7 @@ export class CepPipe implements PipeTransform {
       .replace(
         /(\d{5})(\d{3})/,
         '$1-$2'
-      );
+      )
 
     return valorFormatado;
   }

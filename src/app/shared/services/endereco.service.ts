@@ -10,27 +10,22 @@ export class EnderecoService {
 
   constructor(private http: HttpClient) {}
 
-  postRegister(e: Endereco, idM: number){
-    return this.http.post<Endereco>(this.baseUrl + '?idM=' + idM, e)
+  postRegister(idM: number, e: Endereco){
+    return this.http.post<Endereco>(`${this.baseUrl}?idM=${idM}`, e)
   }
-  putEdit(e: Endereco, idE: number, idM: number){
-    return this.http.put<Endereco>(this.baseUrl + '/' + idE + '?idM=' + idM, e)
+  putEdit(monitoradorId: number, enderecoId: number, e: Endereco, ){
+    return this.http.put<Endereco>(`${this.baseUrl}/${enderecoId}?idM=${monitoradorId}`, e)
   }
   delete(id: number){
     return this.http.delete<Endereco>(this.baseUrl + '/' + id)
   }
   getList(filtros: string) {
-    if (filtros == '' || filtros == null)
+    if (filtros == '')
       return this.http.get<Enderecos>(this.baseUrl);
     else{
-      let path = this.makePath(null, filtros)
+      let path = this.makePath('', filtros)
       return this.http.get<Enderecos>(`${this.baseUrl}/filtrar${path}`);
     }
-  }
-  getFilter(filtros: any) {
-    let path = this.makePath(null, filtros)
-    console.log(path)
-    return this.http.get<Enderecos>(`${this.baseUrl}/filtrar${path}`);
   }
   getPdf(id: any, filtros: any) {
     let path = this.makePath(id, filtros)
@@ -46,7 +41,7 @@ export class EnderecoService {
 
   makePath(id: any, filtros: any){
     let path;
-    if (id != null)
+    if (id != '')
       path = `?id=${id}`;
     else if (filtros == undefined)
       path = ''

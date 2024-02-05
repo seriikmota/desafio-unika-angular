@@ -6,6 +6,7 @@ import {EnderecoService} from "../../../shared/services/endereco.service";
 import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
 import {HttpClientModule} from "@angular/common/http";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
+import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
 
 @Component({
   selector: 'app-excluir-endereco',
@@ -21,44 +22,37 @@ import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.comp
   styleUrl: './excluir-endereco.component.css'
 })
 export class ExcluirEnderecoComponent {
-  feedbackError: boolean;
-  feedbackSuccess: boolean;
-  feedbackMessage: string;
-  constructor(@Inject(MAT_DIALOG_DATA) public eId: number,
+  feedbackError: boolean
+  feedbackMessage: string
+  constructor(@Inject(MAT_DIALOG_DATA) public enderecoId: number,
               private dialogRef: MatDialogRef<ListagemEnderecoComponent>,
               private dialog: MatDialog,
               private service: EnderecoService) {
-    this.feedbackError = false;
-    this.feedbackSuccess = false;
-    this.feedbackMessage = '';
+    this.feedbackError = false
+    this.feedbackMessage = ''
   }
 
   onSubmit() {
     try {
-      this.service.delete(this.eId).subscribe({
+      this.service.delete(this.enderecoId).subscribe({
         error: (e) => {
-          this.feedbackSuccess = false;
-          this.feedbackError = true;
-          this.feedbackMessage = e.error;
+          this.feedbackError = true
+          this.feedbackMessage = e.error
         },
-        complete: () => {
-          this.feedbackSuccess = true;
-          this.feedbackError = false;
-          this.feedbackMessage = 'Endereço excluido com sucesso!';
-          setTimeout(() => {
-            this.dialogRef.close();
-          }, 1500);
+        complete:() => {
+          this.feedbackError = false
+          this.dialogRef.close()
+          this.dialog.open(ModalSucessoComponent, {
+            width: '390px',
+            data: 'Endereço excluido com sucesso!'
+          })
         }
       })
     } catch (error) {
-      this.openErro('Ocorreu um erro ao enviar a requisição!');
+      this.dialog.open(ModalErroComponent, {
+        width: '390px',
+        data: 'Ocorreu um erro ao realizar a requisição!'
+      })
     }
-  }
-
-  openErro(message: string) {
-    this.dialog.open(ModalErroComponent, {
-      width: '390px',
-      data: message
-    });
   }
 }

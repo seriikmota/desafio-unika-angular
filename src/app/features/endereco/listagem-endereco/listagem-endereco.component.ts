@@ -51,98 +51,93 @@ import {ExcluirEnderecoComponent} from "../excluir-endereco/excluir-endereco.com
   styleUrl: './listagem-endereco.component.css'
 })
 export class ListagemEnderecoComponent implements OnInit {
-  displayedColumns: string[];
-  isCollapsed: boolean = true;
-  filtroAtual!: string;
+  isCollapsed: boolean = true
+  dataSource: MatTableDataSource<Endereco>
+  displayedColumns: string[]
+  enderecos: Enderecos
   filtroForm!: FormGroup
-  enderecos: Enderecos;
-  dataSource: MatTableDataSource<Endereco>;
-  estados!: string[];
-  cidades!: string[];
+  filtroAtual!: string
+  estados!: string[]
+  cidades!: string[]
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { monitorador: number, enderecos: Enderecos },
-              private service: EnderecoService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {monitoradorId: number, enderecos: Enderecos},
               private dialog: MatDialog,
+              private service: EnderecoService,
               private formBuilder: FormBuilder) {
     this.displayedColumns = ['cep', 'endereco', 'numero', 'bairro', 'cidade', 'estado', 'telefone', 'principal', 'acoes'];
     this.enderecos = this.data.enderecos;
+    this.ordenar(this.enderecos)
     this.dataSource = new MatTableDataSource<Endereco>(this.enderecos);
-  }
 
-  ngOnInit(): void {
     this.filtroForm = this.formBuilder.group({
       texto: [''],
       estado: [''],
       cidade: [''],
-      monitorador: [this.data.monitorador]
+      monitorador: [this.data.monitoradorId]
     })
+    this.filtroAtual = this.filtroForm.value
+  }
 
+  ngOnInit(): void {
     this.filtroForm.valueChanges.subscribe(filtros => {
-      this.getEnderecos(filtros);
+      this.filtroAtual = filtros
+      this.listarEnderecos(filtros)
     });
-  }
-
-  getEnderecos(filtros: string) {
-    try {
-      this.service.getFilter(filtros).subscribe(enderecos => {
-        this.enderecos = enderecos;
-        this.ordenar(this.enderecos)
-        this.dataSource = new MatTableDataSource<any>(this.enderecos);
-      });
-    } catch (error) {
-      this.openErro('Ocorreu um erro ao enviar a requisição!')
-    }
-  }
-
-  ordenar(enderecos: Enderecos) {
-    enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
-    enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
-    enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
-  }
-
-  getFieldsFilter() {
-    this.estados = this.enderecos.map(endereco => endereco.estado);
-    this.estados = this.estados.filter((estado, index, self) => self.indexOf(estado) === index);
-    this.estados.sort();
-    this.cidades = this.enderecos.map(endereco => endereco.cidade);
-    this.cidades = this.cidades.filter((cidade, index, self) => self.indexOf(cidade) === index);
-    this.cidades.sort();
-    console.log('GETS: ' + this.estados + ' - ' + this.enderecos)
   }
 
   openCadastrar() {
-    this.dialog.open(CadastrarEnderecoComponent, {
-      width: '700px'
-    });
-  }
-
-  onEditar(endereco: Endereco) {
-    this.dialog.open(EditarEnderecoComponent, {
+    const dialogRef = this.dialog.open(CadastrarEnderecoComponent, {
       width: '700px',
-      data: endereco
+      data: this.data.monitoradorId
     });
+    dialogRef.afterClosed().subscribe(() => {this.listarEnderecos(this.filtroAtual)})
   }
 
-  openExcluir(id: string) {
-    this.dialog.open(ExcluirEnderecoComponent, {
+  openEditar(endereco: Endereco) {
+    const dialogRef = this.dialog.open(EditarEnderecoComponent, {
+      width: '700px',
+      data: {endereco: endereco, monitoradorId: this.data.monitoradorId}
+    });
+    dialogRef.afterClosed().subscribe(() => {this.listarEnderecos(this.filtroAtual)})
+  }
+
+  openExcluir(enderecoId: number) {
+    const dialogRef = this.dialog.open(ExcluirEnderecoComponent, {
       width: '390px',
-      data: id
+      data: enderecoId
     });
+    dialogRef.afterClosed().subscribe(() => {this.listarEnderecos(this.filtroAtual)})
   }
 
-  openErro(message: string) {
-    this.dialog.open(ModalErroComponent, {
-      width: '390px',
-      data: message
-    });
-  }
-
-  onPdf(id: any) {
+  downloadPdf(id: any) {
     this.service.getPdf(id, this.filtroAtual);
   }
 
-  onExcel(id: any) {
+  downloadExcel(id: any) {
     this.service.getExcel(id, this.filtroAtual);
+  }
+
+  listarEnderecos(filtros: any){
+    this.service.getList(filtros).subscribe({
+      next:(value) => {
+        this.enderecos = value;
+        this.ordenar(this.enderecos)
+        this.dataSource = new MatTableDataSource<any>(this.enderecos);
+      },
+      error:() => {
+        this.dialog.open(ModalErroComponent, {
+          width: '390px',
+          data: 'Ocorreu um erro ao realizar a listagem de endereços!'
+        });
+      }
+    })
+  }
+
+  ordenar(enderecos: Enderecos) {
+    enderecos.sort((a, b) => (a.principal < b.principal) ? -1 : 1);
+    enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
+    enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
+    enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
   }
 
 }

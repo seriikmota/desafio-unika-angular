@@ -10,7 +10,7 @@ export class CnpjPipe implements PipeTransform {
     if (value == null)
       return ''
 
-    let valorFormatado = (value + '').replace(/[^0-9]/g, '');
+    let valorFormatado = (value + '').replace(/[^0-9]/g, '')
 
     valorFormatado = valorFormatado
       .padStart(14, '0')

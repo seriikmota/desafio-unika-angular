@@ -26,6 +26,7 @@ import {EditarMonitoradorComponent} from "../editar-monitorador/editar-monitorad
 import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-monitorador.component";
 import {pagination, PaginationComponent} from "../../../components/pagination/pagination.component";
 import {ExcluirMonitoradorComponent} from "../excluir-monitorador/excluir-monitorador.component";
+import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
 
 @Component({
   selector: 'app-listagem-monitorador',
@@ -66,76 +67,90 @@ export class ListagemMonitoradorComponent implements OnInit {
   monitoradores: Monitoradores;
   dataSource: MatTableDataSource<Monitorador>;
 
-  constructor(private service: MonitoradorService,
-              private dialog:MatDialog,
+  constructor(private dialog:MatDialog,
+              private service: MonitoradorService,
               private formBuilder: FormBuilder) {
     this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes'];
     this.monitoradores = [];
     this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
     this.dataSource.paginator = this.paginator;
-  }
-
-  ngOnInit(): void {
-    this.service.getList().subscribe(monitoradores => {
-      this.monitoradores = monitoradores;
-      this.ordenar(monitoradores);
-      this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
-      this.dataSource.paginator = this.paginator;
-    });
 
     this.filtroForm = this.formBuilder.group({
       texto: [''],
       tipo: [''],
       ativo: ['']
     });
+  }
+
+  ngOnInit(): void {
+    this.listarMonitorador('')
 
     this.filtroForm.valueChanges.subscribe(filtros => {
-      this.service.getFilter(filtros).subscribe(monitoradores => {
-        this.filtroAtual = filtros;
-        this.ordenar(monitoradores);
-        this.dataSource.data = monitoradores;
-      })
+      this.filtroAtual = filtros
+      this.listarMonitorador(filtros)
     })
-
   }
 
   openCadastrar(){
-    this.dialog.open(CadastrarMonitoradorComponent,{
+    const dialogRef = this.dialog.open(CadastrarMonitoradorComponent,{
       width: '700px'
-    });
+    })
+    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
   }
 
-  onEditar(monitorador: Monitorador) {
-    this.dialog.open(EditarMonitoradorComponent, {
+  openEditar(monitorador: Monitorador) {
+    const dialogRef = this.dialog.open(EditarMonitoradorComponent, {
       width: '700px',
       data: monitorador
     })
-  }
-
-  onPdf(id: any) {
-    this.service.getPdf(id, this.filtroAtual);
-  }
-
-  onExcel(id: any) {
-    this.service.getExcel(id, this.filtroAtual);
-  }
-
-  openErro() {
-    this.dialog.open(ModalErroComponent, {
-      width: '390px',
-    });
-  }
-
-  openImportar() {
-    this.dialog.open(ImportarMonitoradorComponent, {
-      width: '550px',
-    });
+    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
   }
 
   openExcluir(id: string) {
-    this.dialog.open(ExcluirMonitoradorComponent, {
+    const dialogRef = this.dialog.open(ExcluirMonitoradorComponent, {
       width: '390px',
       data: id
+    })
+    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+  }
+
+  openImportar() {
+    const dialogRef = this.dialog.open(ImportarMonitoradorComponent, {
+      width: '550px',
+    });
+    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+  }
+
+  openEnderecos(id: number, enderecos: Enderecos){
+    const dialogRef = this.dialog.open(ListagemEnderecoComponent, {
+      width: '1100px',
+      data: {monitoradorId: id, enderecos: enderecos}
+    })
+    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+  }
+
+  downloadPdf(id: any) {
+    this.service.getPdf(id, this.filtroAtual);
+  }
+
+  downloadExcel(id: any) {
+    this.service.getExcel(id, this.filtroAtual);
+  }
+
+  listarMonitorador(filtros: any) {
+    this.service.getList(filtros).subscribe({
+      next: value => {
+        this.monitoradores = value;
+        this.ordenar(value);
+        this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
+        this.dataSource.paginator = this.paginator;
+      },
+      error: () => {
+        this.dialog.open(ModalErroComponent, {
+          width: '390px',
+          data: 'Ocorreu um erro ao fazer a listagem dos monitoradores!'
+        });
+      }
     });
   }
 
@@ -145,13 +160,4 @@ export class ListagemMonitoradorComponent implements OnInit {
     monitoradores.sort((a, b) => (a.razao < b.razao) ? -1 : 1);
     monitoradores.sort((a, b) => (a.ativo < b.ativo) ? -1 : 1);
   }
-
-  openEnderecos(id: any, enderecos: Enderecos){
-    console.log(id, enderecos)
-    this.dialog.open(ListagemEnderecoComponent, {
-      width: '1100px',
-      data: {monitorador: id, enderecos: enderecos}
-    })
-  }
-
 }

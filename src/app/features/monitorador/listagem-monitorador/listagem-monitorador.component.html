@@ -39,8 +39,8 @@
     </div>
 
     <div class="col-3 d-flex justify-content-end align-self-start mt-2">
-      <button mat-raised-button color="primary" (click)="onPdf(null)" class="me-1">PDF</button>
-      <button mat-raised-button color="primary" (click)="onExcel(null)" class="me-1">Excel</button>
+      <button mat-raised-button color="primary" (click)="downloadPdf('')" [disabled]="monitoradores.length == 0" class="me-1">PDF</button>
+      <button mat-raised-button color="primary" (click)="downloadExcel('')" [disabled]="monitoradores.length == 0" class="me-1">Excel</button>
       <button mat-raised-button color="primary" (click)="openImportar()" class="me-1">Importar</button>
       <button mat-raised-button color="primary" (click)="openCadastrar()">Cadastrar</button>
     </div>
@@ -97,17 +97,17 @@
           <th mat-header-cell *matHeaderCellDef> Ações</th>
           <td mat-cell *matCellDef="let element">
             <div class="btn-group align-top text-dark">
-              <button class="btn btn-sm btn-secondary badge" type="button" (click)="onPdf(element.id)"><i
-                class="fa-solid fa-file-pdf icone"></i>
+              <button class="btn btn-sm btn-secondary badge" type="button" (click)="downloadPdf(element.id)">
+                <i class="fa-solid fa-file-pdf icone"></i>
               </button>
-              <button class="btn btn-sm btn-secondary badge" type="button" (click)="onExcel(element.id)"><i
-                class="fa-solid fa-file-excel icone"></i>
+              <button class="btn btn-sm btn-secondary badge" type="button" (click)="downloadExcel(element.id)">
+                <i class="fa-solid fa-file-excel icone"></i>
               </button>
-              <button class="btn btn-sm btn-warning badge" type="button" (click)="onEditar(element)"><i
-                class="fa-solid fa-pen-to-square icone"></i>
+              <button class="btn btn-sm btn-warning badge" type="button" (click)="openEditar(element)">
+                <i class="fa-solid fa-pen-to-square icone"></i>
               </button>
-              <button class="btn btn-sm btn-danger badge" type="button" (click)="openExcluir(element.id)"><i
-                class="fa-solid fa-trash icone"></i></button>
+              <button class="btn btn-sm btn-danger badge" type="button" (click)="openExcluir(element.id)">
+                <i class="fa-solid fa-trash icone"></i></button>
             </div>
           </td>
         </ng-container>

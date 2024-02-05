@@ -1,10 +1,14 @@
 import {Component, Inject} from '@angular/core';
 import {MatButton} from "@angular/material/button";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {NgIf} from "@angular/common";
 import {ListagemMonitoradorComponent} from "../listagem-monitorador/listagem-monitorador.component";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {HttpClientModule} from "@angular/common/http";
+import {Dialog} from "@angular/cdk/dialog";
+import {Monitorador} from "../../../shared/models/monitorador";
+import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
+import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 
 @Component({
   selector: 'app-excluir-monitorador',
@@ -21,37 +25,36 @@ import {HttpClientModule} from "@angular/common/http";
 })
 export class ExcluirMonitoradorComponent {
   feedbackError: boolean;
-  feedbackSuccess: boolean;
   feedbackMessage: string;
-  constructor(@Inject(MAT_DIALOG_DATA) public data: number,
+  constructor(@Inject(MAT_DIALOG_DATA) public monitoradorId: number,
               private dialogRef: MatDialogRef<ListagemMonitoradorComponent>,
+              private dialog: MatDialog,
               private service: MonitoradorService) {
     this.feedbackError = false;
-    this.feedbackSuccess = false;
     this.feedbackMessage = '';
   }
 
   onSubmit() {
     try {
-      this.service.delete(this.data).subscribe({
+      this.service.delete(this.monitoradorId).subscribe({
         error: (e) => {
-          this.feedbackSuccess = false;
           this.feedbackError = true;
           this.feedbackMessage = e.error;
         },
         complete: () => {
-          this.feedbackSuccess = true;
           this.feedbackError = false;
-          this.feedbackMessage = 'Monitorador excluido com sucesso!';
-          setTimeout(() => {
-            this.dialogRef.close();
-          }, 1500);
+          this.dialogRef.close()
+          this.dialog.open(ModalSucessoComponent, {
+            width: '390px',
+            data: 'Monitorador excluido com sucesso!'
+          })
         }
       })
     } catch (error) {
-      this.feedbackSuccess = false;
-      this.feedbackError = true;
-      this.feedbackMessage = 'Erro ao enviar a requisição!';
+      this.dialog.open(ModalErroComponent, {
+        width: '390px',
+        data: 'Ocorreu um erro ao enviar a requisição!'
+      });
     }
   }
 }

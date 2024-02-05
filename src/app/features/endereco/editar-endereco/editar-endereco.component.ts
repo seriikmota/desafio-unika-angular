@@ -12,11 +12,13 @@ import {NgForOf, NgIf} from "@angular/common";
 import {Monitoradores} from "../../../shared/models/monitorador";
 import {EnderecoService} from "../../../shared/services/endereco.service";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
-import {Endereco} from "../../../shared/models/endereco";
+import {Endereco, Enderecos} from "../../../shared/models/endereco";
 import {HttpClientModule} from "@angular/common/http";
 import {DialogRef} from "@angular/cdk/dialog";
 import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
+import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
+import {end} from "@popperjs/core";
 
 @Component({
   selector: 'app-editar-endereco',
@@ -45,21 +47,19 @@ import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.comp
 })
 export class EditarEnderecoComponent implements OnInit {
   editarForm!: FormGroup
-  feedbackError: boolean;
-  feedbackSuccess: boolean;
-  feedbackMessage: string;
-  estados: string[];
+  feedbackError: boolean
+  feedbackMessage: string
+  estados: string[]
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {endereco: Endereco, idM: number},
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {endereco: Endereco, monitoradorId: number},
               private dialogRef: DialogRef<ListagemEnderecoComponent>,
               private dialog: MatDialog,
-              private formBuilder: FormBuilder,
-              private service: EnderecoService) {
-    this.feedbackError = false;
-    this.feedbackSuccess = false;
-    this.feedbackMessage = '';
+              private service: EnderecoService,
+              private formBuilder: FormBuilder) {
+    this.feedbackError = false
+    this.feedbackMessage = ''
     this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
-      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
+      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
 
     this.editarForm = this.formBuilder.group({
       cep: [this.data.endereco.cep, Validators.required],
@@ -70,7 +70,7 @@ export class EditarEnderecoComponent implements OnInit {
       estado: [this.data.endereco.estado, Validators.required],
       telefone: [this.data.endereco.telefone, Validators.required],
       principal: [this.data.endereco.principal, Validators.required],
-    });
+    })
   }
 
   ngOnInit() {
@@ -87,31 +87,25 @@ export class EditarEnderecoComponent implements OnInit {
 
   onSubmit(endereco: Endereco) {
     try {
-      this.service.postRegister(endereco, this.data.idM).subscribe({
+      this.service.putEdit(this.data.monitoradorId, this.data.endereco.id, endereco).subscribe({
         error: (e) => {
-          this.feedbackSuccess = false;
           this.feedbackError = true;
           this.feedbackMessage = e.error;
         },
-        complete: () => {
-          this.feedbackSuccess = false;
-          this.feedbackError = true;
-          this.feedbackMessage = 'Endereço editado com sucesso!';
-          setTimeout(() => {
-            this.dialogRef.close();
-          }, 1500);
+        complete:() => {
+          this.feedbackError = false
+          this.dialogRef.close()
+          this.dialog.open(ModalSucessoComponent, {
+            width: '390px',
+            data: 'Endereço editado com sucesso!'
+          })
         }
       })
     } catch (error) {
-      this.openErro('Ocorreu um erro ao enviar a requisição!')
+      this.dialog.open(ModalErroComponent, {
+        width: '390px',
+        data: 'Ocorreu um erro ao realizar a requisição!'
+      });
     }
   }
-
-  openErro(message: string) {
-    this.dialog.open(ModalErroComponent, {
-      width: '390px',
-      data: message
-    });
-  }
-
 }

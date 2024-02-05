@@ -1,11 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {
-  MAT_DIALOG_DATA, MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogTitle
-} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
@@ -18,11 +12,11 @@ import {EnderecoService} from "../../../shared/services/endereco.service";
 import {HttpClientModule} from "@angular/common/http";
 import {Endereco} from "../../../shared/models/endereco";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
-import {Monitorador, Monitoradores} from "../../../shared/models/monitorador";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 import {DialogRef} from "@angular/cdk/dialog";
 import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
+import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
 
 @Component({
   selector: 'app-cadastrar-endereco',
@@ -31,10 +25,7 @@ import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.
   imports: [
     HttpClientModule,
     MatButton,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogContent,
-    MatDialogTitle,
+    MatDialogModule,
     MatError,
     MatFormField,
     MatIcon,
@@ -53,21 +44,19 @@ import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.
 })
 export class CadastrarEnderecoComponent implements OnInit {
   cadastrarForm!: FormGroup
-  feedbackError: boolean;
-  feedbackSuccess: boolean;
-  feedbackMessage: string;
-  estados: string[];
+  feedbackError: boolean
+  feedbackMessage: string
+  estados: string[]
 
-  constructor(@Inject(MAT_DIALOG_DATA) public mId: number,
+  constructor(@Inject(MAT_DIALOG_DATA) public monitoradorId: number,
               private dialogRef: DialogRef<ListagemEnderecoComponent>,
               private dialog: MatDialog,
-              private formBuilder: FormBuilder,
-              private service: EnderecoService) {
+              private service: EnderecoService,
+              private formBuilder: FormBuilder) {
     this.estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
-      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
-    this.feedbackError = false;
-    this.feedbackSuccess = false;
-    this.feedbackMessage = '';
+      'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
+    this.feedbackError = false
+    this.feedbackMessage = ''
 
     this.cadastrarForm = this.formBuilder.group({
       cep: ['', Validators.required],
@@ -78,48 +67,51 @@ export class CadastrarEnderecoComponent implements OnInit {
       estado: ['', Validators.required],
       telefone: ['', Validators.required],
       principal: ['', Validators.required],
-    });
+    })
   }
 
   ngOnInit() {
     this.cadastrarForm.get('cep')?.valueChanges.subscribe(cep => {
-      if (cep.replace(/[^0-9]/g, '').length == 8)
-        this.service.getCep(cep).subscribe(endereco => {
-          this.cadastrarForm.controls['endereco'].setValue(endereco.endereco)
-          this.cadastrarForm.controls['bairro'].setValue(endereco.bairro)
-          this.cadastrarForm.controls['cidade'].setValue(endereco.cidade)
-          this.cadastrarForm.controls['estado'].setValue(endereco.estado)
+      if(cep.replace(/[^0-9]/g, '').length == 8)
+        this.service.getCep(cep).subscribe({
+          next:(value) => {
+            this.feedbackError = false
+            this.cadastrarForm.controls['endereco'].setValue(value.endereco)
+            this.cadastrarForm.controls['bairro'].setValue(value.bairro)
+            this.cadastrarForm.controls['cidade'].setValue(value.cidade)
+            this.cadastrarForm.controls['estado'].setValue(value.estado)
+          },
+          error:() => {
+            this.feedbackError = true
+            this.feedbackMessage = 'Esse CEP não foi encontrado!'
+          }
         })
     })
   }
 
-  onSubmit(endereco: Endereco) {
+  onSubmit(endereco: Endereco){
     try {
-      this.service.postRegister(endereco, this.mId).subscribe({
-        error: (e) => {
-          this.feedbackSuccess = false;
-          this.feedbackError = true;
-          this.feedbackMessage = e.error;
+      this.service.postRegister(this.monitoradorId, endereco).subscribe({
+        error:(e) => {
+          this.feedbackError = true
+          this.feedbackMessage = e.error
         },
-        complete: () => {
-          this.feedbackSuccess = false;
-          this.feedbackError = true;
-          this.feedbackMessage = 'Endereço cadastrado com sucesso!';
-          setTimeout(() => {
-            this.dialogRef.close();
-          }, 1500);
+        complete:() => {
+          this.feedbackError = true
+          this.dialogRef.close()
+          this.feedbackMessage = ''
+          this.dialog.open(ModalSucessoComponent, {
+            width: '390px',
+            data: 'Endereço cadastrado com sucesso!'
+          })
         }
       })
-    } catch (error) {
-      this.openErro('Ocorreu um erro ao enviar a requisição!')
+    } catch(error) {
+      this.dialog.open(ModalErroComponent, {
+        width: '390px',
+        data: 'Ocorreu um erro ao realizar a requisição!'
+      })
     }
-  }
-
-  openErro(message: string) {
-    this.dialog.open(ModalErroComponent, {
-      width: '390px',
-      data: message
-    });
   }
 
 }

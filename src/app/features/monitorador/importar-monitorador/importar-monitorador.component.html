@@ -4,16 +4,12 @@
 
   <label class="form-label">Se já possui o arquivo, insira no local abaixo</label>
 
-  <form>
     <div class="input-group">
-      <input class="form-control form-control" type="file" accept=".xls, .xlsx">
-      <button mat-flat-button color="primary" class="rounded-end-pill">Importar</button>
+      <input class="form-control form-control" type="file" accept=".xls, .xlsx" (change)="onFileChange($event)">
+      <button mat-flat-button color="primary" class="rounded-end-pill" (click)="onSubmit()">Importar</button>
     </div>
-  </form>
 
   <div *ngIf="feedbackError" class="notify-error" [innerHTML]='feedbackMessage'></div>
-
-  <div *ngIf="feedbackSuccess" class="notify-success" [innerHTML]='feedbackMessage'></div>
 
   <hr class="border-2">
 

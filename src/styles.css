@@ -1,4 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-form-field {
+  width: 100%;
+}
+
+.notify-error {
+  background-color: #FADDDD;
+  color: #893232;
+  padding: 8px;
+  border: 1px groove #f7cbcb;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
