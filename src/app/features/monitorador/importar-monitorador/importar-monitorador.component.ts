@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
@@ -24,49 +24,53 @@ import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.comp
 export class ImportarMonitoradorComponent {
   feedbackError: boolean
   feedbackMessage: string
-  file!: any
+  event!: any
+
   constructor(private dialogRef: MatDialogRef<ListagemMonitoradorComponent>,
               private dialog: MatDialog,
-              private service: MonitoradorService){
+              private service: MonitoradorService) {
     this.feedbackError = false
     this.feedbackMessage = ''
   }
 
-  onFileChange(event: any){
-    this.file = event.target?.files[0]
+  onFileChange(event: any) {
+    this.event = event
   }
 
-  onSubmit(){
-    if(this.file.type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+  onSubmit() {
+    if (this.event == undefined) {
+      this.feedbackError = true
+      this.feedbackMessage = 'Insira algum arquivo para importar!'
+    } else if (this.event.target.files[0].type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       this.feedbackError = true
       this.feedbackMessage = 'Tipo de arquivo inválido, é aceito somente .xlsx!'
-    }
-    else {
-      try{
-        this.service.postImport(this.file).subscribe({
-          error:(e) => {
+    } else {
+      this.service.postImport(this.event.target.files[0]).subscribe({
+        error: (e) => {
+          if (e.status == '409') {
+            this.dialog.open(ModalErroComponent, {
+              width: '390px',
+              data: 'Ocorreu um erro ao enviar a requisição!'
+            });
+          } else {
             this.feedbackError = true
             this.feedbackMessage = e.error
-          },
-          complete:() => {
-            this.feedbackError = false;
-            this.dialogRef.close()
-            this.dialog.open(ModalSucessoComponent, {
-              width: '390px',
-              data: 'Monitorador(es) importado(s) com sucesso!'
-            })
           }
-        })
-      } catch(error){
-        this.dialog.open(ModalErroComponent, {
-          width: '390px',
-          data: 'Ocorreu um erro ao enviar a requisição!'
-        });
-      }
+          this.event.target.value = null
+        },
+        complete: () => {
+          this.feedbackError = false;
+          this.dialogRef.close()
+          this.dialog.open(ModalSucessoComponent, {
+            width: '390px',
+            data: 'Monitorador(es) importado(s) com sucesso!'
+          })
+        }
+      })
     }
   }
 
-  downloadModel(){
+  downloadModel() {
     this.service.getModelImport();
   }
 }

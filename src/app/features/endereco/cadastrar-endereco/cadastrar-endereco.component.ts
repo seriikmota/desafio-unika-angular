@@ -17,11 +17,12 @@ import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.comp
 import {DialogRef} from "@angular/cdk/dialog";
 import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
 import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
+import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 
 @Component({
   selector: 'app-cadastrar-endereco',
   standalone: true,
-  providers: [EnderecoService, MonitoradorService],
+  providers: [EnderecoService, MonitoradorService, provideNgxMask()],
   imports: [
     HttpClientModule,
     MatButton,
@@ -37,7 +38,8 @@ import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-suc
     MonitoradorPipe,
     NgForOf,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskDirective
   ],
   templateUrl: './cadastrar-endereco.component.html',
   styleUrl: './cadastrar-endereco.component.css'
@@ -72,16 +74,16 @@ export class CadastrarEnderecoComponent implements OnInit {
 
   ngOnInit() {
     this.cadastrarForm.get('cep')?.valueChanges.subscribe(cep => {
-      if(cep.replace(/[^0-9]/g, '').length == 8)
+      if (cep.replace(/[^0-9]/g, '').length == 8)
         this.service.getCep(cep).subscribe({
-          next:(value) => {
+          next: (value) => {
             this.feedbackError = false
             this.cadastrarForm.controls['endereco'].setValue(value.endereco)
             this.cadastrarForm.controls['bairro'].setValue(value.bairro)
             this.cadastrarForm.controls['cidade'].setValue(value.cidade)
             this.cadastrarForm.controls['estado'].setValue(value.estado)
           },
-          error:() => {
+          error: () => {
             this.feedbackError = true
             this.feedbackMessage = 'Esse CEP não foi encontrado!'
           }
@@ -89,29 +91,29 @@ export class CadastrarEnderecoComponent implements OnInit {
     })
   }
 
-  onSubmit(endereco: Endereco){
-    try {
-      this.service.postRegister(this.monitoradorId, endereco).subscribe({
-        error:(e) => {
+  onSubmit(endereco: Endereco) {
+    this.service.postRegister(this.monitoradorId, endereco).subscribe({
+      error: (e) => {
+        if (e.status == '409') {
+          this.dialog.open(ModalErroComponent, {
+            width: '390px',
+            data: 'Ocorreu um erro ao enviar a requisição!'
+          });
+        } else {
           this.feedbackError = true
           this.feedbackMessage = e.error
-        },
-        complete:() => {
-          this.feedbackError = true
-          this.dialogRef.close()
-          this.feedbackMessage = ''
-          this.dialog.open(ModalSucessoComponent, {
-            width: '390px',
-            data: 'Endereço cadastrado com sucesso!'
-          })
         }
-      })
-    } catch(error) {
-      this.dialog.open(ModalErroComponent, {
-        width: '390px',
-        data: 'Ocorreu um erro ao realizar a requisição!'
-      })
-    }
+      },
+      complete: () => {
+        this.feedbackError = true
+        this.dialogRef.close()
+        this.feedbackMessage = ''
+        this.dialog.open(ModalSucessoComponent, {
+          width: '390px',
+          data: 'Endereço cadastrado com sucesso!'
+        })
+      }
+    })
   }
 
 }

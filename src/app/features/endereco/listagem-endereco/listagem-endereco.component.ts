@@ -76,6 +76,7 @@ export class ListagemEnderecoComponent implements OnInit {
       monitorador: [this.data.monitoradorId]
     })
     this.filtroAtual = this.filtroForm.value
+    this.getFieldsFilter()
   }
 
   ngOnInit(): void {
@@ -123,6 +124,7 @@ export class ListagemEnderecoComponent implements OnInit {
         this.enderecos = value;
         this.ordenar(this.enderecos)
         this.dataSource = new MatTableDataSource<any>(this.enderecos);
+        this.getFieldsFilter()
       },
       error:() => {
         this.dialog.open(ModalErroComponent, {
@@ -138,6 +140,15 @@ export class ListagemEnderecoComponent implements OnInit {
     enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
     enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
     enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
+  }
+
+  getFieldsFilter(){
+    this.estados = this.enderecos.map(endereco => endereco.estado);
+    this.estados = this.estados.filter((estado, index, self) => self.indexOf(estado) === index);
+    this.estados.sort();
+    this.cidades = this.enderecos.map(endereco => endereco.cidade);
+    this.cidades = this.cidades.filter((cidade, index, self) => self.indexOf(cidade) === index);
+    this.cidades.sort();
   }
 
 }

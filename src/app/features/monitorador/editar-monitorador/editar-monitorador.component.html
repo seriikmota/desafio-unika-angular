@@ -34,7 +34,7 @@
       <div class="col-4">
         <mat-form-field> <!-- *ngIf="cadastrarForm.controls['tipo'].value != 'FISICA'" -->
           <mat-label>CNPJ</mat-label>
-          <input matInput placeholder="00.000.000/0000-00" formControlName="cnpj">
+          <input matInput placeholder="00.000.000/0000-00" formControlName="cnpj" mask="00.000.000/0000-00">
           <mat-error>CNPJ é obrigatório!</mat-error>
         </mat-form-field>
       </div>
@@ -60,7 +60,7 @@
       <div class="col-4">
         <mat-form-field> <!-- *ngIf="cadastrarForm.controls['tipo'].value != 'JURIDICA'" -->
           <mat-label>CPF</mat-label>
-          <input matInput placeholder="000.000.000-00" formControlName="cpf">
+          <input matInput placeholder="000.000.000-00" formControlName="cpf" mask="000.000.000-00">
           <mat-error>CPF é obrigatório!</mat-error>
         </mat-form-field>
       </div>
@@ -86,9 +86,7 @@
       <div class="col-4">
         <mat-form-field>
           <mat-label>Data</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="data">
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <input matInput placeholder="00/00/0000" formControlName="data" mask="XX/XX/XXXX">
           <mat-error>Data é obrigatória!</mat-error>
         </mat-form-field>
       </div>

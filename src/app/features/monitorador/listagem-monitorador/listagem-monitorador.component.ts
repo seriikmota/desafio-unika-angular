@@ -93,7 +93,7 @@ export class ListagemMonitoradorComponent implements OnInit {
 
   openCadastrar(){
     const dialogRef = this.dialog.open(CadastrarMonitoradorComponent,{
-      width: '700px'
+      width: '700px',
     })
     dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
   }
@@ -155,9 +155,9 @@ export class ListagemMonitoradorComponent implements OnInit {
   }
 
   ordenar(monitoradores: Monitoradores){
-    monitoradores.sort((a, b) => (a.tipo < b.tipo) ? -1 : 1);
+    console.log('ordenando')
     monitoradores.sort((a, b) => (a.nome < b.nome) ? -1 : 1);
     monitoradores.sort((a, b) => (a.razao < b.razao) ? -1 : 1);
-    monitoradores.sort((a, b) => (a.ativo < b.ativo) ? -1 : 1);
+    monitoradores.sort((a, b) => (a.tipo < b.tipo) ? -1 : 1);
   }
 }

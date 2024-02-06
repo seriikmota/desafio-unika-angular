@@ -12,19 +12,19 @@
           </mat-form-field>
 
           <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-            <mat-form-field style="width: 110px">
+            <mat-form-field style="width: 150px">
               <mat-label>Estado</mat-label>
               <mat-select formControlName="estado">
-                <mat-option>Escolha</mat-option>
-                <mat-option *ngFor="let estado of estados" value="cidade">{{ estado }}</mat-option>
+                <mat-option>-- Escolha --</mat-option>
+                <mat-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field style="width: 200px">
               <mat-label>Cidade</mat-label>
               <mat-select formControlName="cidade">
-                <mat-option>Escolha</mat-option>
-                <mat-option *ngFor="let cidade of cidades" value="cidade">{{ cidade }}</mat-option>
+                <mat-option>-- Escolha --</mat-option>
+                <mat-option *ngFor="let cidade of cidades" [value]="cidade">{{ cidade }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>

@@ -11,7 +11,7 @@
       <div class="col-8">
         <mat-form-field>
           <mat-label>CEP</mat-label>
-          <input matInput formControlName="cep">
+          <input matInput formControlName="cep" placeholder="00000-000" mask="00000-000">
           <mat-icon matSuffix><i class="fa-solid fa-magnifying-glass"></i></mat-icon>
           <mat-error>CEP é obrigatório!</mat-error>
         </mat-form-field>
@@ -72,7 +72,7 @@
       <div class="col-4">
         <mat-form-field>
           <mat-label>Telefone</mat-label>
-          <input matInput formControlName="telefone">
+          <input matInput formControlName="telefone" placeholder="(00) 00000-0000" mask="(00) 00000-0000">
           <mat-error>Telefone é obrigatório!</mat-error>
         </mat-form-field>
       </div>

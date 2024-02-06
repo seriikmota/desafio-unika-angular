@@ -8,9 +8,9 @@ export class AtivoPipe implements PipeTransform {
 
   transform(value: unknown, ...args: unknown[]): unknown {
     if (value)
-      return 'Sim'
+      return 'Ativo'
     else
-      return 'Não'
+      return 'Inativo'
   }
 
 }

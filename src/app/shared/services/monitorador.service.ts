@@ -77,11 +77,15 @@ export class MonitoradorService {
     return path
   }
 
-  formatDate(date: string) {
-    const options = {day: '2-digit', month: '2-digit', year: 'numeric'};
-    // @ts-ignore
-    const formatter = new Intl.DateTimeFormat('en-US', options);
-    return formatter.format(Date.parse(date));
+  formatDate(date: string){
+    date = date.replace(/[^0-9]/g, '')
+    return date
+      .padStart(8, '0')
+      .substring(0,8)
+      .replace(
+        /(\d{2})(\d{2})(\d{4})/,
+        '$1/$2/$3'
+      )
   }
 
 

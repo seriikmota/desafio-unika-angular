@@ -19,11 +19,12 @@ import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
 import {end} from "@popperjs/core";
+import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 
 @Component({
   selector: 'app-editar-endereco',
   standalone: true,
-  providers: [EnderecoService, MonitoradorService],
+  providers: [EnderecoService, MonitoradorService, provideNgxMask()],
   imports: [
     FormsModule,
     HttpClientModule,
@@ -40,7 +41,8 @@ import {end} from "@popperjs/core";
     MonitoradorPipe,
     NgForOf,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskDirective
   ],
   templateUrl: './editar-endereco.component.html',
   styleUrl: './editar-endereco.component.css'
@@ -51,7 +53,7 @@ export class EditarEnderecoComponent implements OnInit {
   feedbackMessage: string
   estados: string[]
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {endereco: Endereco, monitoradorId: number},
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { endereco: Endereco, monitoradorId: number },
               private dialogRef: DialogRef<ListagemEnderecoComponent>,
               private dialog: MatDialog,
               private service: EnderecoService,
@@ -86,26 +88,26 @@ export class EditarEnderecoComponent implements OnInit {
   }
 
   onSubmit(endereco: Endereco) {
-    try {
-      this.service.putEdit(this.data.monitoradorId, this.data.endereco.id, endereco).subscribe({
-        error: (e) => {
-          this.feedbackError = true;
-          this.feedbackMessage = e.error;
-        },
-        complete:() => {
-          this.feedbackError = false
-          this.dialogRef.close()
-          this.dialog.open(ModalSucessoComponent, {
+    this.service.putEdit(this.data.monitoradorId, this.data.endereco.id, endereco).subscribe({
+      error: (e) => {
+        if (e.status == '409') {
+          this.dialog.open(ModalErroComponent, {
             width: '390px',
-            data: 'Endereço editado com sucesso!'
-          })
+            data: 'Ocorreu um erro ao enviar a requisição!'
+          });
+        } else {
+          this.feedbackError = true
+          this.feedbackMessage = e.error
         }
-      })
-    } catch (error) {
-      this.dialog.open(ModalErroComponent, {
-        width: '390px',
-        data: 'Ocorreu um erro ao realizar a requisição!'
-      });
-    }
+      },
+      complete: () => {
+        this.feedbackError = false
+        this.dialogRef.close()
+        this.dialog.open(ModalSucessoComponent, {
+          width: '390px',
+          data: 'Endereço editado com sucesso!'
+        })
+      }
+    })
   }
 }
