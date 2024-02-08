@@ -136,10 +136,10 @@ export class ListagemEnderecoComponent implements OnInit {
   }
 
   ordenar(enderecos: Enderecos) {
-    enderecos.sort((a, b) => (a.principal < b.principal) ? -1 : 1);
-    enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
-    enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
     enderecos.sort((a, b) => (a.endereco < b.endereco) ? -1 : 1);
+    enderecos.sort((a, b) => (a.cidade < b.cidade) ? -1 : 1);
+    enderecos.sort((a, b) => (a.estado < b.estado) ? -1 : 1);
+    enderecos.sort((a, b) => (a.principal < b.principal) ? 1 : -1);
   }
 
   getFieldsFilter(){

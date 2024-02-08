@@ -59,21 +59,22 @@ import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-suc
   styleUrl: './listagem-monitorador.component.css'
 })
 export class ListagemMonitoradorComponent implements OnInit {
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-  displayedColumns: string[];
-  isCollapsed: boolean = true;
-  filtroAtual!: string;
-  filtroForm!: FormGroup;
-  monitoradores: Monitoradores;
-  dataSource: MatTableDataSource<Monitorador>;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator
+  displayedColumns: string[]
+  isCollapsed: boolean = true
+  filtroAtual!: string
+  filtroForm!: FormGroup
+  monitoradores: Monitoradores
+  dataSource: MatTableDataSource<Monitorador>
 
   constructor(private dialog:MatDialog,
               private service: MonitoradorService,
               private formBuilder: FormBuilder) {
-    this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes'];
-    this.monitoradores = [];
-    this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores);
-    this.dataSource.paginator = this.paginator;
+    this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes']
+    this.monitoradores = []
+    this.ordenar(this.monitoradores)
+    this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores)
+    this.dataSource.paginator = this.paginator
 
     this.filtroForm = this.formBuilder.group({
       texto: [''],
@@ -155,9 +156,8 @@ export class ListagemMonitoradorComponent implements OnInit {
   }
 
   ordenar(monitoradores: Monitoradores){
-    console.log('ordenando')
-    monitoradores.sort((a, b) => (a.nome < b.nome) ? -1 : 1);
     monitoradores.sort((a, b) => (a.razao < b.razao) ? -1 : 1);
+    monitoradores.sort((a, b) => (a.nome < b.nome) ? -1 : 1);
     monitoradores.sort((a, b) => (a.tipo < b.tipo) ? -1 : 1);
   }
 }
