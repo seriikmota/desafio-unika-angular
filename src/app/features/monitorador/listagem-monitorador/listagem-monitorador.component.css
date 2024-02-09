@@ -31,3 +31,11 @@ mat-form-field {
 .mat-column-acoes {
   width: 8%;
 }
+
+.table-hover-row:hover {
+  background-color: #eeebeb; /* cor de fundo ao passar o mouse */
+}
+
+.striped {
+  background-color: #f5f5f5
+}

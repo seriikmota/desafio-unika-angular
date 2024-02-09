@@ -17,7 +17,7 @@ import {CepPipe} from "../../../shared/pipes/cep.pipe";
 import {TelefonePipe} from "../../../shared/pipes/telefone.pipe";
 import {PrincipalPipe} from "../../../shared/pipes/principal.pipe";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
-import {NgForOf} from "@angular/common";
+import {NgClass, NgForOf} from "@angular/common";
 import {CadastrarEnderecoComponent} from "../cadastrar-endereco/cadastrar-endereco.component";
 import {EditarEnderecoComponent} from "../editar-endereco/editar-endereco.component";
 import {HttpClientModule} from "@angular/common/http";
@@ -45,7 +45,8 @@ import {ExcluirEnderecoComponent} from "../excluir-endereco/excluir-endereco.com
     TelefonePipe,
     PrincipalPipe,
     MonitoradorPipe,
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   templateUrl: './listagem-endereco.component.html',
   styleUrl: './listagem-endereco.component.css'

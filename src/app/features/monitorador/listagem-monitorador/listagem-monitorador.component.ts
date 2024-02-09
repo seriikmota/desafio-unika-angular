@@ -25,6 +25,7 @@ import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-mon
 import {pagination, PaginationComponent} from "../../../components/pagination/pagination.component";
 import {ExcluirMonitoradorComponent} from "../excluir-monitorador/excluir-monitorador.component";
 import {CpfOrCnpjPipe} from "../../../shared/pipes/cpf-or-cnpj.pipe";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-listagem-monitorador',
@@ -50,7 +51,8 @@ import {CpfOrCnpjPipe} from "../../../shared/pipes/cpf-or-cnpj.pipe";
     TipoPipe,
     MatFabButton,
     MatMiniFabButton,
-    PaginationComponent
+    PaginationComponent,
+    NgClass
   ],
   templateUrl: './listagem-monitorador.component.html',
   styleUrl: './listagem-monitorador.component.css'
