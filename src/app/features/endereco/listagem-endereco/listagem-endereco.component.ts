@@ -73,7 +73,7 @@ export class ListagemEnderecoComponent implements OnInit {
       texto: [''],
       estado: [''],
       cidade: [''],
-      monitorador: [this.data.monitoradorId]
+      monitoradorId: [this.data.monitoradorId]
     })
     this.filtroAtual = this.filtroForm.value
     this.getFieldsFilter()
@@ -124,7 +124,6 @@ export class ListagemEnderecoComponent implements OnInit {
         this.enderecos = value;
         this.ordenar(this.enderecos)
         this.dataSource = new MatTableDataSource<any>(this.enderecos);
-        this.getFieldsFilter()
       },
       error:() => {
         this.dialog.open(ModalErroComponent, {

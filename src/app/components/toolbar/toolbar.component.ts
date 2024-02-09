@@ -19,6 +19,4 @@ import {MatButton} from "@angular/material/button";
   styleUrl: './toolbar.component.css'
 })
 export class ToolbarComponent {
-
-  protected readonly Title = Title;
 }

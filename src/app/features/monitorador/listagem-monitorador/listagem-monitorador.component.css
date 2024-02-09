@@ -11,28 +11,22 @@ mat-form-field {
 }
 
 .mat-column-id {
-  width: 3%;
+  width: 8%;
 }
 .mat-column-tipo {
-  width: 5%;
+  width: 10%;
 }
-.mat-column-cnpj {
-  width: 8%;
+.mat-column-cpfOrCnpj {
+  width: 15%;
 }
-.mat-column-razao {
-  width: 29%;
-}
-.mat-column-cpf {
-  width: 8%;
-}
-.mat-column-nome {
-  width: 29%;
+.mat-column-nomeOrRazao {
+  width: 43%;
 }
 .mat-column-enderecos {
-  width: 5%;
+  width: 8%;
 }
 .mat-column-ativo {
-  width: 5%;
+  width: 8%;
 }
 .mat-column-acoes {
   width: 8%;

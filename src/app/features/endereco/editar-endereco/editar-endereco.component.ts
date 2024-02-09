@@ -9,16 +9,14 @@ import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {MonitoradorPipe} from "../../../shared/pipes/monitorador.pipe";
 import {NgForOf, NgIf} from "@angular/common";
-import {Monitoradores} from "../../../shared/models/monitorador";
 import {EnderecoService} from "../../../shared/services/endereco.service";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
-import {Endereco, Enderecos} from "../../../shared/models/endereco";
+import {Endereco} from "../../../shared/models/endereco";
 import {HttpClientModule} from "@angular/common/http";
 import {DialogRef} from "@angular/cdk/dialog";
 import {ListagemEnderecoComponent} from "../listagem-endereco/listagem-endereco.component";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
-import {end} from "@popperjs/core";
 import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 
 @Component({

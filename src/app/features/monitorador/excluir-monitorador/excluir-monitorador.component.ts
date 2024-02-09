@@ -5,8 +5,6 @@ import {NgIf} from "@angular/common";
 import {ListagemMonitoradorComponent} from "../listagem-monitorador/listagem-monitorador.component";
 import {MonitoradorService} from "../../../shared/services/monitorador.service";
 import {HttpClientModule} from "@angular/common/http";
-import {Dialog} from "@angular/cdk/dialog";
-import {Monitorador} from "../../../shared/models/monitorador";
 import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
 import {ModalErroComponent} from "../../../components/modal-erro/modal-erro.component";
 

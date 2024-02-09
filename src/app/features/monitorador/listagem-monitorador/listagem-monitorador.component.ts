@@ -1,7 +1,5 @@
-import {Component, Injectable, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AtivoPipe} from "../../../shared/pipes/ativo.pipe";
-import {CnpjPipe} from "../../../shared/pipes/cnpj.pipe";
-import {CpfPipe} from "../../../shared/pipes/cpf.pipe";
 import {MatButton, MatFabButton, MatMiniFabButton} from "@angular/material/button";
 import {MatTableModule, MatTableDataSource} from "@angular/material/table";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
@@ -26,7 +24,7 @@ import {EditarMonitoradorComponent} from "../editar-monitorador/editar-monitorad
 import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-monitorador.component";
 import {pagination, PaginationComponent} from "../../../components/pagination/pagination.component";
 import {ExcluirMonitoradorComponent} from "../excluir-monitorador/excluir-monitorador.component";
-import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-sucesso.component";
+import {CpfOrCnpjPipe} from "../../../shared/pipes/cpf-or-cnpj.pipe";
 
 @Component({
   selector: 'app-listagem-monitorador',
@@ -34,8 +32,7 @@ import {ModalSucessoComponent} from "../../../components/modal-sucesso/modal-suc
   providers: [{provide: MatPaginatorIntl, useClass: pagination}, MonitoradorService],
   imports: [
     AtivoPipe,
-    CnpjPipe,
-    CpfPipe,
+    CpfOrCnpjPipe,
     HttpClientModule,
     MatButton,
     MatFormField,
@@ -67,10 +64,11 @@ export class ListagemMonitoradorComponent implements OnInit {
   monitoradores: Monitoradores
   dataSource: MatTableDataSource<Monitorador>
 
-  constructor(private dialog:MatDialog,
+  constructor(private dialog: MatDialog,
               private service: MonitoradorService,
               private formBuilder: FormBuilder) {
-    this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes']
+    //this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes']
+    this.displayedColumns = ['id', 'tipo', 'cpfOrCnpj', 'nomeOrRazao', 'enderecos', 'ativo', 'acoes']
     this.monitoradores = []
     this.ordenar(this.monitoradores)
     this.dataSource = new MatTableDataSource<Monitorador>(this.monitoradores)
@@ -92,11 +90,13 @@ export class ListagemMonitoradorComponent implements OnInit {
     })
   }
 
-  openCadastrar(){
-    const dialogRef = this.dialog.open(CadastrarMonitoradorComponent,{
+  openCadastrar() {
+    const dialogRef = this.dialog.open(CadastrarMonitoradorComponent, {
       width: '700px',
     })
-    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+    dialogRef.afterClosed().subscribe(() => {
+      this.listarMonitorador('')
+    })
   }
 
   openEditar(monitorador: Monitorador) {
@@ -104,7 +104,9 @@ export class ListagemMonitoradorComponent implements OnInit {
       width: '700px',
       data: monitorador
     })
-    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+    dialogRef.afterClosed().subscribe(() => {
+      this.listarMonitorador('')
+    })
   }
 
   openExcluir(id: string) {
@@ -112,22 +114,28 @@ export class ListagemMonitoradorComponent implements OnInit {
       width: '390px',
       data: id
     })
-    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+    dialogRef.afterClosed().subscribe(() => {
+      this.listarMonitorador('')
+    })
   }
 
   openImportar() {
     const dialogRef = this.dialog.open(ImportarMonitoradorComponent, {
       width: '550px',
     });
-    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+    dialogRef.afterClosed().subscribe(() => {
+      this.listarMonitorador('')
+    })
   }
 
-  openEnderecos(id: number, enderecos: Enderecos){
+  openEnderecos(id: number, enderecos: Enderecos) {
     const dialogRef = this.dialog.open(ListagemEnderecoComponent, {
       width: '1100px',
       data: {monitoradorId: id, enderecos: enderecos}
     })
-    dialogRef.afterClosed().subscribe(() => {this.listarMonitorador('')})
+    dialogRef.afterClosed().subscribe(() => {
+      this.listarMonitorador('')
+    })
   }
 
   downloadPdf(id: any) {
@@ -155,7 +163,7 @@ export class ListagemMonitoradorComponent implements OnInit {
     });
   }
 
-  ordenar(monitoradores: Monitoradores){
+  ordenar(monitoradores: Monitoradores) {
     monitoradores.sort((a, b) => (a.razao < b.razao) ? -1 : 1);
     monitoradores.sort((a, b) => (a.nome < b.nome) ? -1 : 1);
     monitoradores.sort((a, b) => (a.tipo < b.tipo) ? -1 : 1);

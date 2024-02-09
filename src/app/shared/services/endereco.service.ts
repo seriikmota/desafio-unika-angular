@@ -10,11 +10,11 @@ export class EnderecoService {
 
   constructor(private http: HttpClient) {}
 
-  postRegister(idM: number, e: Endereco){
-    return this.http.post<Endereco>(`${this.baseUrl}?idM=${idM}`, e)
+  postRegister(monitoradorId: number, e: Endereco){
+    return this.http.post<Endereco>(`${this.baseUrl}?monitoradorId=${monitoradorId}`, e)
   }
   putEdit(monitoradorId: number, enderecoId: number, e: Endereco, ){
-    return this.http.put<Endereco>(`${this.baseUrl}/${enderecoId}?idM=${monitoradorId}`, e)
+    return this.http.put<Endereco>(`${this.baseUrl}/${enderecoId}?monitoradorId=${monitoradorId}`, e)
   }
   delete(id: number){
     return this.http.delete<Endereco>(this.baseUrl + '/' + id)
@@ -28,12 +28,13 @@ export class EnderecoService {
     }
   }
   getPdf(id: any, filtros: any) {
+    console.log(filtros)
     let path = this.makePath(id, filtros)
-    window.open(`${this.baseUrl}/relatorioPdf${path}`);
+    window.open(`${this.baseUrl}/pdf${path}`);
   }
   getExcel(id: any, filtros: any) {
     let path = this.makePath(id, filtros)
-    window.open(`${this.baseUrl}/relatorioExcel${path}`);
+    window.open(`${this.baseUrl}/excel${path}`);
   }
   getCep(cep: string) {
     return this.http.get<Endereco>(this.baseUrl + '/cep/' + cep);
@@ -49,16 +50,16 @@ export class EnderecoService {
       let text = filtros.texto;
       let estado = filtros.estado;
       let cidade = filtros.cidade;
-      let monitorador = filtros.monitorador;
+      let monitoradorId = filtros.monitoradorId;
       if (text == undefined)
         text = ''
       if (estado == undefined)
         estado = ''
       if (cidade == undefined)
         cidade = ''
-      if (monitorador == undefined)
-        monitorador = ''
-      path = `?text=${text}&estado=${estado}&cidade=${cidade}&monitorador=${monitorador}`
+      if (monitoradorId == undefined)
+        monitoradorId = ''
+      path = `?text=${text}&estado=${estado}&cidade=${cidade}&monitoradorId=${monitoradorId}`
     }
     return path
   }

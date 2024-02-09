@@ -44,12 +44,12 @@ export class MonitoradorService {
 
   getPdf(id: any, filtros: any) {
     let path = this.makePath(id, filtros)
-    window.open(`${this.baseUrl}/relatorioPdf${path}`);
+    window.open(`${this.baseUrl}/pdf${path}`);
   }
 
   getExcel(id: any, filtros: any) {
     let path = this.makePath(id, filtros)
-    window.open(`${this.baseUrl}/relatorioExcel${path}`);
+    window.open(`${this.baseUrl}/excel${path}`);
   }
 
   getModelImport() {
@@ -57,15 +57,15 @@ export class MonitoradorService {
   }
 
   makePath(id: any, filtros: any) {
-    let path;
+    let path
     if (id != '')
-      path = `?id=${id}`;
+      path = `?id=${id}`
     else if (filtros == undefined)
       path = ''
     else {
-      let text = filtros.texto;
-      let tipo = filtros.tipo;
-      let ativo = filtros.ativo;
+      let text = filtros.texto
+      let tipo = filtros.tipo
+      let ativo = filtros.ativo
       if (text == undefined)
         text = ''
       if (tipo == undefined)
