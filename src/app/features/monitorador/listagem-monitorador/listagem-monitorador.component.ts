@@ -69,7 +69,6 @@ export class ListagemMonitoradorComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private service: MonitoradorService,
               private formBuilder: FormBuilder) {
-    //this.displayedColumns = ['id', 'tipo', 'cnpj', 'razao', 'cpf', 'nome', 'enderecos', 'ativo', 'acoes']
     this.displayedColumns = ['id', 'tipo', 'cpfOrCnpj', 'nomeOrRazao', 'enderecos', 'ativo', 'acoes']
     this.monitoradores = []
     this.ordenar(this.monitoradores)

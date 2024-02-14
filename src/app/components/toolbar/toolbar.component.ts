@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {Title} from "@angular/platform-browser";
 import {NgOptimizedImage} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 
