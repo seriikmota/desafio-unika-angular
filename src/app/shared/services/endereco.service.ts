@@ -43,7 +43,7 @@ export class EnderecoService {
   makePath(id: any, filtros: any){
     let path;
     if (id != '')
-      path = `?id=${id}`;
+      path = `?id=${id}&monitoradorId=${filtros.monitoradorId}`;
     else if (filtros == undefined)
       path = ''
     else {
