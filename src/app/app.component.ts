@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, isDevMode, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {ToolbarComponent} from "./components/toolbar/toolbar.component";
 import {HttpClientModule} from "@angular/common/http";
@@ -10,6 +10,15 @@ import {HttpClientModule} from "@angular/common/http";
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'desafio-unika-angular';
+
+  ngOnInit() {
+    if (isDevMode()){
+      console.log('Development!')
+    }
+    else {
+      console.log('Production!')
+    }
+  }
 }

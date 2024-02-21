@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Monitorador, Monitoradores} from "../models/monitorador";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MonitoradorService {
-  private baseUrl = "http://localhost:8081/monitorador";
+  private baseUrl = `${environment.database}monitorador`;
 
   constructor(private http: HttpClient) {
 
