@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Injectable, OnInit, ViewChild} from '@angular/core';
 import {AtivoPipe} from "../../../shared/pipes/ativo.pipe";
 import {MatButton, MatFabButton, MatMiniFabButton} from "@angular/material/button";
 import {MatTableModule, MatTableDataSource} from "@angular/material/table";
@@ -22,10 +22,30 @@ import {ListagemEnderecoComponent} from "../../endereco/listagem-endereco/listag
 import {CadastrarMonitoradorComponent} from "../cadastrar-monitorador/cadastrar-monitorador.component";
 import {EditarMonitoradorComponent} from "../editar-monitorador/editar-monitorador.component";
 import {ImportarMonitoradorComponent} from "../importar-monitorador/importar-monitorador.component";
-import {pagination, PaginationComponent} from "../../../components/pagination/pagination.component";
 import {ExcluirMonitoradorComponent} from "../excluir-monitorador/excluir-monitorador.component";
 import {CpfOrCnpjPipe} from "../../../shared/pipes/cpf-or-cnpj.pipe";
 import {NgClass} from "@angular/common";
+import {Subject} from "rxjs";
+
+@Injectable()
+export class pagination implements MatPaginatorIntl {
+  changes = new Subject<void>();
+
+  firstPageLabel = $localize`Primeira página`;
+  itemsPerPageLabel = $localize`Itens por página:`;
+  lastPageLabel = $localize`Ultima página`;
+
+  nextPageLabel = 'Próxima página';
+  previousPageLabel = 'Página anterior';
+
+  getRangeLabel(page: number, pageSize: number, length: number): string {
+    if (length === 0) {
+      return $localize`Página 1 de 1`;
+    }
+    const amountPages = Math.ceil(length / pageSize);
+    return $localize`Página ${page + 1} de ${amountPages}`;
+  }
+}
 
 @Component({
   selector: 'app-listagem-monitorador',
@@ -51,7 +71,6 @@ import {NgClass} from "@angular/common";
     TipoPipe,
     MatFabButton,
     MatMiniFabButton,
-    PaginationComponent,
     NgClass
   ],
   templateUrl: './listagem-monitorador.component.html',

@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   apiKey: 'devKey',
-  database: 'http://localhost:8080/'
+  database: 'http://localhost:8081/'
 }

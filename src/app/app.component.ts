@@ -11,8 +11,7 @@ import {HttpClientModule} from "@angular/common/http";
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  title = 'desafio-unika-angular';
-
+  title = 'monitorador-manager-angular';
   ngOnInit() {
     if (isDevMode()){
       console.log('Development!')
